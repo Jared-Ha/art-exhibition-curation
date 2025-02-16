@@ -9,18 +9,29 @@ const metApi = axios.create({
 });
 
 export const getVAObjects = (query) => {
-  const vaUrl = `https://api.vam.ac.uk/v2/objects/search?q=${query}&images_exist=true&page_size=10&response_format=json`;
-  console.log("V&A API URL:", vaUrl); // Log the final V&A API URL
+  const formattedQuery = query.replace(/\s+/g, "+");
+
+  const vaUrl =
+    `${vaApi.defaults.baseURL}?q=${formattedQuery}&images_exist=true&page_size=10&response_format=json
+      &kw_object_type=painting
+      &kw_object_type=sculpture
+      &kw_object_type=drawing
+      &kw_object_type=print
+      &kw_object_type=relief
+      &kw_object_type=manuscript
+      &kw_object_type=engraving
+      &kw_object_type=mosaic
+      &kw_object_type=artifact
+      &kw_object_type=antiquities
+      &kw_object_type=ceramic
+      &kw_object_type=bronze
+      &kw_object_type=marble
+      &kw_object_type=textile`.replace(/\s+/g, "");
+
+  console.log("Final V&A API URL:", vaUrl);
 
   return vaApi
-    .get("/", {
-      params: {
-        q: query,
-        images_exist: true,
-        page_size: 10,
-        response_format: "json",
-      },
-    })
+    .get(vaUrl)
     .then((response) => response.data.records || [])
     .catch((error) => {
       console.error("Error fetching from V&A:", error);
@@ -29,20 +40,30 @@ export const getVAObjects = (query) => {
 };
 
 export const getMetObjects = (query) => {
-  const metUrl = `https://collectionapi.metmuseum.org/public/collection/v1/search?q=${query}&hasImages=true`;
-  console.log("The Met API URL:", metUrl); // Log the final Met API URL
+  const encodedQuery = encodeURIComponent(query);
+
+  console.log(
+    "The Met API URL:",
+    `${metApi.defaults.baseURL}/search?q=${encodedQuery}&hasImages=true`
+  );
 
   return metApi
-    .get("/search", { params: { q: query, hasImages: true } })
+    .get("/search", { params: { q: encodedQuery, hasImages: true } })
     .then((searchResponse) => {
       if (!searchResponse.data.objectIDs) return [];
+
       const objectRequests = searchResponse.data.objectIDs
         .slice(0, 10)
-        .map((id) => metApi.get(`/objects/${id}`));
+        .map((id) =>
+          metApi
+            .get(`/objects/${id}`)
+            .then((res) => res.data)
+            .catch(() => null)
+        );
 
       return Promise.all(objectRequests);
     })
-    .then((responses) => responses.map((res) => res.data))
+    .then((responses) => responses.filter((res) => res !== null))
     .catch((error) => {
       console.error("Error fetching from The Met:", error);
       return [];

@@ -11,7 +11,7 @@ function ObjectList({ searchTerm }) {
     if (!searchTerm) return;
 
     setLoading(true);
-    setSearchAttempted(true); // Mark that a search has been attempted
+    setSearchAttempted(true);
 
     Promise.all([getVAObjects(searchTerm), getMetObjects(searchTerm)])
       .then(([vaResults, metResults]) =>
