@@ -34,3 +34,22 @@
   font-weight: bold;
   color: #000;
 }
+
+.object-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.object-card {
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 8px;
+  background: #f0f8ff;
+  text-align: center;
+}
+
+.object-card img {
+  max-width: 100%;
+}
