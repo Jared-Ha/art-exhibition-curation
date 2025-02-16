@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import placeholderImage from "../assets/placeholder-image.jpg";
 
 function checkImageExists(imageUrl, callback) {
@@ -15,18 +16,16 @@ function checkImageExists(imageUrl, callback) {
     .catch(() => callback(null));
 }
 
-function fetchOgImage(objectURL, setImageSrc) {
+// Fetch OpenGraph Image from barebones backend
+function fetchMetOgImage(objectURL, setImageSrc) {
   fetch(
     `http://localhost:5000/fetch-image?url=${encodeURIComponent(objectURL)}`
   )
     .then((res) => res.json())
     .then((data) => {
-      setImageSrc(data.imageUrl || "missing-image-placeholder.jpg");
+      setImageSrc(data.imageUrl || placeholderImage);
     })
-    .catch((error) => {
-      console.error("Error fetching OG image:", error);
-      setImageSrc("missing-image-placeholder.jpg");
-    });
+    .catch(() => setImageSrc(placeholderImage));
 }
 
 function constructVAHighResImage(baseUrl) {
@@ -34,6 +33,7 @@ function constructVAHighResImage(baseUrl) {
 }
 
 function ObjectCard({ object }) {
+  const navigate = useNavigate();
   const [imageSrc, setImageSrc] = useState(null);
 
   const vaHighResImage = constructVAHighResImage(
@@ -67,18 +67,26 @@ function ObjectCard({ object }) {
             } else if (object._images?._primary_thumbnail) {
               setImageSrc(object._images._primary_thumbnail);
             } else if (object.objectURL) {
-              fetchOgImage(object.objectURL, setImageSrc);
+              fetchMetOgImage(object.objectURL, setImageSrc);
             }
           });
         }
       });
     } else if (object.objectURL) {
-      fetchOgImage(object.objectURL, setImageSrc);
+      fetchMetOgImage(object.objectURL, setImageSrc);
     }
   }, [object]);
 
+  const handleClick = () => {
+    navigate(`/object/${object.objectID || object.systemNumber}`);
+  };
+
   return (
-    <div className="object-card">
+    <div
+      className="object-card"
+      onClick={handleClick}
+      style={{ cursor: "pointer" }}
+    >
       {imageSrc ? (
         <img
           src={imageSrc}
@@ -94,6 +102,7 @@ function ObjectCard({ object }) {
       <h3>{object._primaryTitle || object.title}</h3>
       <p>{artistOrCulture}</p>
       {object.objectID && <p>Met Object ID: {object.objectID}</p>}
+      {object.systemNumber && <p>V&A System Number: {object.systemNumber}</p>}
     </div>
   );
 }

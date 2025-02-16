@@ -72,3 +72,9 @@
   font-size: 1rem;
   border-radius: 10px;
 }
+.single-object {
+  padding: 1rem;
+}
+.single-object img {
+  max-width: 100%;
+}

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const vaApi = axios.create({
-  baseURL: "https://api.vam.ac.uk/v2/objects/search",
+  baseURL: "https://api.vam.ac.uk/v2",
 });
 
 const metApi = axios.create({
@@ -12,7 +12,7 @@ export const getVAObjects = (query) => {
   const formattedQuery = query.replace(/\s+/g, "+");
 
   const vaUrl =
-    `${vaApi.defaults.baseURL}?q=${formattedQuery}&images_exist=true&page_size=10&response_format=json
+    `${vaApi.defaults.baseURL}/objects/search?q=${formattedQuery}&images_exist=true&page_size=10&response_format=json
       &kw_object_type=painting
       &kw_object_type=sculpture
       &kw_object_type=drawing
@@ -67,5 +67,25 @@ export const getMetObjects = (query) => {
     .catch((error) => {
       console.error("Error fetching from The Met:", error);
       return [];
+    });
+};
+
+export const getVAObjectById = (systemNumber) => {
+  return vaApi
+    .get(`/object/${systemNumber}`)
+    .then((res) => res.data)
+    .catch((error) => {
+      console.error(`Error fetching V&A object ${systemNumber}:`, error);
+      return null;
+    });
+};
+
+export const getMetObjectById = (id) => {
+  return metApi
+    .get(`/objects/${id}`)
+    .then((res) => res.data)
+    .catch((error) => {
+      console.error(`Error fetching Met object ${id}:`, error);
+      return null;
     });
 };
