@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import placeholderImage from "../assets/placeholder-image.jpg";
 import { getVAObjectById, getMetObjectById } from "../api";
 
 function SingleObject() {
   const { id } = useParams();
+  const location = useLocation();
   const [object, setObject] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [imageSrc, setImageSrc] = useState(placeholderImage);
+  const [imageSrc, setImageSrc] = useState(
+    location.state?.imageSrc || placeholderImage
+  );
 
   useEffect(() => {
     const fetchObject = async () => {
@@ -20,19 +23,21 @@ function SingleObject() {
           console.log("Fetched object data:", data);
           setObject(data || null);
 
-          if (isVAObject) {
-            const vaHighResImage = data?.meta?.images?._iiif_image
-              ? `${data.meta.images._iiif_image}full/full/0/default.jpg`
-              : null;
-            setImageSrc(
-              vaHighResImage ||
-                data?.meta?.images?._primary_thumbnail ||
-                placeholderImage
-            );
-          } else {
-            setImageSrc(
-              data.primaryImage || data.primaryImageSmall || placeholderImage
-            );
+          if (imageSrc === placeholderImage) {
+            if (isVAObject) {
+              const vaHighResImage = data?.meta?.images?._iiif_image
+                ? `${data.meta.images._iiif_image}full/full/0/default.jpg`
+                : null;
+              setImageSrc(
+                vaHighResImage ||
+                  data?.meta?.images?._primary_thumbnail ||
+                  placeholderImage
+              );
+            } else {
+              setImageSrc(
+                data.primaryImage || data.primaryImageSmall || placeholderImage
+              );
+            }
           }
         })
         .catch((error) => {
@@ -43,10 +48,10 @@ function SingleObject() {
     };
 
     fetchObject();
-  }, [id]);
+  }, [id, imageSrc]);
 
   if (loading) return <p>Loading...</p>;
-  if (!object) return <p>No object found.</p>;
+  if (!object) return <p>No record found.</p>;
 
   const formattedDimensions = object.record?.dimensions
     ? Array.isArray(object.record.dimensions)

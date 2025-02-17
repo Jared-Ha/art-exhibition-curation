@@ -42,15 +42,11 @@ export const getVAObjects = (query) => {
 export const getMetObjects = (query) => {
   const encodedQuery = encodeURIComponent(query);
 
-  console.log("Fetching Met search results for:", query);
+  const metUrl = `${metApi.defaults.baseURL}/search?q=${encodedQuery}`;
+  console.log("Final Met API URL:", metUrl);
 
   return metApi
-    .get("/search", {
-      params: {
-        q: encodedQuery,
-        hasImages: true,
-      },
-    })
+    .get("/search", { params: { q: encodedQuery } })
     .then((searchResponse) => {
       if (!searchResponse.data.objectIDs) return [];
 
@@ -65,32 +61,45 @@ export const getMetObjects = (query) => {
 
       return Promise.all(objectRequests);
     })
-    .then((responses) =>
-      responses.filter((obj) => {
+    .then((responses) => {
+      return responses.filter((obj) => {
         if (!obj) return false;
+
+        const hasImages =
+          obj.primaryImage ||
+          obj.primaryImageSmall ||
+          (obj.additionalImages && obj.additionalImages.length > 0);
+
+        const hasOGFallback = obj.objectURL;
+
+        if (!hasImages && !hasOGFallback) {
+          return false;
+        }
 
         const queryWords = query.toLowerCase().split(/\s+/);
         const objectText = [
           obj.title,
           obj.medium,
           obj.department,
-          obj.period, // Middle Kingdom, Second Intermediate Period
-          obj.country, // Egypt, France, USA
+          obj.period,
+          obj.country,
           obj.region,
           obj.artistDisplayName,
           obj.artistAlphaSort,
-          obj.objectName, // "Painting", "Bust"
-          obj.classification, // "Sculpture", "Ceramics"
+          obj.objectName,
+          obj.classification,
           obj.constituents?.map((c) => c.role).join(" "),
           obj.tags?.map((tag) => tag.term).join(" "),
         ]
           .filter(Boolean)
-          .map((text) => text.toLowerCase())
+          .map((text) => String(text).toLowerCase())
           .join(" ");
 
-        return queryWords.every((word) => objectText.includes(word));
-      })
-    )
+        const matches = queryWords.some((word) => objectText.includes(word));
+
+        return matches;
+      });
+    })
     .catch((error) => {
       console.error("Error fetching from The Met:", error);
       return [];

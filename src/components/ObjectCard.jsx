@@ -16,16 +16,21 @@ function checkImageExists(imageUrl, callback) {
     .catch(() => callback(null));
 }
 
-// Fetch OpenGraph Image from barebones backend
-function fetchMetOgImage(objectURL, setImageSrc) {
+function fetchMetOgImage(objectURL, setImageSrc, setIsLoading) {
+  setIsLoading(true);
   fetch(
     `http://localhost:5000/fetch-image?url=${encodeURIComponent(objectURL)}`
   )
     .then((res) => res.json())
     .then((data) => {
-      setImageSrc(data.imageUrl || placeholderImage);
+      setImageSrc(data.imageUrl || null);
     })
-    .catch(() => setImageSrc(placeholderImage));
+    .catch(() => {
+      setImageSrc(null);
+    })
+    .finally(() => {
+      setIsLoading(false);
+    });
 }
 
 function constructVAHighResImage(baseUrl) {
@@ -35,6 +40,7 @@ function constructVAHighResImage(baseUrl) {
 function ObjectCard({ object }) {
   const navigate = useNavigate();
   const [imageSrc, setImageSrc] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const vaHighResImage = constructVAHighResImage(
     object._images?._iiif_image_base_url
@@ -46,7 +52,6 @@ function ObjectCard({ object }) {
     vaHighResImage ||
     object._images?._primary_thumbnail;
 
-  const objectURL = object.objectURL || "#";
   const artistOrCulture =
     object.artistDisplayName ||
     object._primaryMaker?.name ||
@@ -54,31 +59,53 @@ function ObjectCard({ object }) {
     "Unknown";
 
   useEffect(() => {
+    let isMounted = true;
+
     if (primaryImage) {
+      setIsLoading(true);
+
       checkImageExists(primaryImage, (validPrimary) => {
+        if (!isMounted) return;
+
         if (validPrimary) {
           setImageSrc(validPrimary);
+          setIsLoading(false);
         } else {
           checkImageExists(object.primaryImageSmall, (validSmall) => {
+            if (!isMounted) return;
+
             if (validSmall) {
               setImageSrc(validSmall);
+              setIsLoading(false);
             } else if (vaHighResImage) {
               setImageSrc(vaHighResImage);
+              setIsLoading(false);
             } else if (object._images?._primary_thumbnail) {
               setImageSrc(object._images._primary_thumbnail);
+              setIsLoading(false);
             } else if (object.objectURL) {
-              fetchMetOgImage(object.objectURL, setImageSrc);
+              fetchMetOgImage(object.objectURL, setImageSrc, setIsLoading);
+            } else {
+              setIsLoading(false);
             }
           });
         }
       });
     } else if (object.objectURL) {
-      fetchMetOgImage(object.objectURL, setImageSrc);
+      fetchMetOgImage(object.objectURL, setImageSrc, setIsLoading);
+    } else {
+      setIsLoading(false);
     }
+
+    return () => {
+      isMounted = false;
+    };
   }, [object]);
 
   const handleClick = () => {
-    navigate(`/object/${object.objectID || object.systemNumber}`);
+    navigate(`/object/${object.objectID || object.systemNumber}`, {
+      state: { imageSrc },
+    });
   };
 
   return (
@@ -87,7 +114,9 @@ function ObjectCard({ object }) {
       onClick={handleClick}
       style={{ cursor: "pointer" }}
     >
-      {imageSrc ? (
+      {isLoading ? (
+        <div className="loading-spinner">Loading...</div>
+      ) : imageSrc ? (
         <img
           src={imageSrc}
           alt={object._primaryTitle || object.title || "Artwork"}
