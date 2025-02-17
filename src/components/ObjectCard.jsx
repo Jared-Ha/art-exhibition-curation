@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getExhibitions, addToExhibition } from "../utils/exhibitionStorage";
 import placeholderImage from "../assets/placeholder-image.jpg";
 
 function checkImageExists(imageUrl, callback) {
@@ -38,18 +37,13 @@ function constructVAHighResImage(baseUrl) {
   return baseUrl ? `${baseUrl}full/full/0/default.jpg` : null;
 }
 
-function ObjectCard({ object }) {
+function ObjectCard({ object, exhibitions, onAddToExhibition }) {
   const navigate = useNavigate();
   const [imageSrc, setImageSrc] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [newExhibitionName, setNewExhibitionName] = useState("");
   const [selectedExhibition, setSelectedExhibition] = useState("");
-  const [exhibitions, setExhibitions] = useState([]);
-
-  useEffect(() => {
-    setExhibitions(getExhibitions());
-  }, []);
 
   const vaHighResImage = constructVAHighResImage(
     object._images?._iiif_image_base_url
@@ -122,16 +116,13 @@ function ObjectCard({ object }) {
     const exhibitionName = newExhibitionName.trim() || selectedExhibition;
     if (!exhibitionName) return;
 
+    // Store the full object in localStorage
     const objectData = {
-      id: object.objectID || object.systemNumber,
-      title: object.title,
-      artist: object.artistDisplayName || "Unknown",
+      ...object,
       image: imageSrc || placeholderImage,
     };
 
-    addToExhibition(exhibitionName, objectData);
-
-    setExhibitions(getExhibitions());
+    onAddToExhibition(exhibitionName, objectData);
 
     setNewExhibitionName("");
     setSelectedExhibition("");

@@ -1,11 +1,17 @@
 import { useState, useEffect } from "react";
 import { getVAObjects, getMetObjects } from "../api";
+import { getExhibitions, addToExhibition } from "../utils/exhibitionStorage";
 import ObjectCard from "./ObjectCard";
 
 function ObjectList({ searchTerm }) {
   const [objects, setObjects] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchAttempted, setSearchAttempted] = useState(false);
+  const [exhibitions, setExhibitions] = useState([]);
+
+  useEffect(() => {
+    setExhibitions(getExhibitions());
+  }, []);
 
   useEffect(() => {
     if (!searchTerm) return;
@@ -21,6 +27,11 @@ function ObjectList({ searchTerm }) {
       .finally(() => setLoading(false));
   }, [searchTerm]);
 
+  const handleAddToExhibition = (exhibitionName, object) => {
+    addToExhibition(exhibitionName, object);
+    setExhibitions(getExhibitions());
+  };
+
   return (
     <div>
       <h2>Search Results</h2>
@@ -35,7 +46,14 @@ function ObjectList({ searchTerm }) {
       )}
       <ul className="object-grid">
         {objects.length > 0 &&
-          objects.map((obj, index) => <ObjectCard key={index} object={obj} />)}
+          objects.map((obj, index) => (
+            <ObjectCard
+              key={index}
+              object={obj}
+              exhibitions={exhibitions}
+              onAddToExhibition={handleAddToExhibition}
+            />
+          ))}
       </ul>
     </div>
   );

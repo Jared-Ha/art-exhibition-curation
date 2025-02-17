@@ -6,6 +6,7 @@ import ObjectList from "./components/ObjectList";
 import CategoryList from "./components/CategoryList";
 import ExhibitionList from "./components/ExhibitionList";
 import SingleObject from "./components/SingleObject";
+import SingleExhibition from "./components/SingleExhibition";
 
 function App() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -16,9 +17,10 @@ function App() {
       <Search setSearchTerm={setSearchTerm} />
       <Routes>
         <Route path="/" element={<ObjectList searchTerm={searchTerm} />} />
-        <Route path="/categories" element={<CategoryList />} />
-        <Route path="/my-exhibitions" element={<ExhibitionList />} />
         <Route path="/object/:id" element={<SingleObject />} />
+        <Route path="/my-exhibitions" element={<ExhibitionList />} />
+        <Route path="/exhibition/:id" element={<SingleExhibition />} />
+        <Route path="/categories" element={<CategoryList />} />
       </Routes>
     </>
   );

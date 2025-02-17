@@ -33,10 +33,10 @@ export const saveExhibitions = (exhibitions) => {
 
 export const addToExhibition = (exhibitionName, object) => {
   const exhibitions = getExhibitions();
-
   let exhibition = exhibitions.find((ex) => ex.name === exhibitionName);
 
   if (!exhibition) {
+    // Create new exhibition if it doesn't exist
     exhibition = {
       id: `exhibition-${Date.now()}`,
       name: exhibitionName,
@@ -45,11 +45,37 @@ export const addToExhibition = (exhibitionName, object) => {
     exhibitions.push(exhibition);
   }
 
-  if (!exhibition.objects.some((obj) => obj.id === object.id)) {
-    exhibition.objects.push(object);
-    saveExhibitions(exhibitions);
-    console.log(`Added to exhibition: ${exhibitionName}`, exhibitions);
-  } else {
-    console.log("⚠️ Object already exists in the exhibition.");
+  // Define a standardized object ID for consistency
+  const objectId = object.objectID || object.systemNumber || object.id;
+
+  if (!objectId) {
+    console.error("⚠️ Object has no valid ID:", object);
+    return;
   }
+
+  // Prevent duplicate objects
+  const isDuplicate = exhibition.objects.some((obj) => obj.id === objectId);
+
+  if (!isDuplicate) {
+    // Store object with a consistent `id`
+    const objectData = {
+      ...object,
+      id: objectId, // Ensure ID is standardized
+    };
+
+    exhibition.objects.push(objectData);
+    saveExhibitions(exhibitions);
+    console.log(`✅ Added object to exhibition: ${exhibitionName}`, objectData);
+  } else {
+    console.warn("⚠️ Object already exists in the exhibition.");
+  }
+};
+
+// ✅ Delete an exhibition by name
+export const deleteExhibition = (exhibitionId) => {
+  let exhibitions = getExhibitions();
+  exhibitions = exhibitions.filter(
+    (exhibition) => exhibition.id !== exhibitionId
+  );
+  saveExhibitions(exhibitions);
 };

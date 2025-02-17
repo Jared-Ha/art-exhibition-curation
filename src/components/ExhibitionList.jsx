@@ -1,13 +1,20 @@
 import { useState, useEffect } from "react";
-import { getExhibitions, saveExhibitions } from "../utils/exhibitionStorage";
+import { useNavigate } from "react-router-dom";
+import {
+  getExhibitions,
+  saveExhibitions,
+  deleteExhibition,
+} from "../utils/exhibitionStorage";
+import ExhibitionCard from "./ExhibitionCard";
 
 function ExhibitionList() {
   const [exhibitions, setExhibitions] = useState([]);
   const [newExhibitionName, setNewExhibitionName] = useState("");
+  const [exhibitionToDelete, setExhibitionToDelete] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const storedExhibitions = getExhibitions();
-    setExhibitions(storedExhibitions);
+    setExhibitions(getExhibitions());
   }, []);
 
   const handleCreateExhibition = () => {
@@ -20,10 +27,19 @@ function ExhibitionList() {
     };
 
     const updatedExhibitions = [...exhibitions, newExhibition];
-
     saveExhibitions(updatedExhibitions);
     setExhibitions(updatedExhibitions);
     setNewExhibitionName("");
+  };
+
+  const handleDeleteExhibition = (exhibitionId) => {
+    deleteExhibition(exhibitionId);
+    setExhibitions(getExhibitions());
+    setExhibitionToDelete(null); // Close the modal
+  };
+
+  const handleViewExhibition = (exhibitionId) => {
+    navigate(`/exhibition/${exhibitionId}`);
   };
 
   return (
@@ -43,22 +59,35 @@ function ExhibitionList() {
       {exhibitions.length === 0 ? (
         <p>No exhibitions yet. Start adding artworks!</p>
       ) : (
-        <ul>
+        <div className="exhibition-grid">
           {exhibitions.map((exhibition) => (
-            <li key={exhibition.id}>
-              <strong>{exhibition.name}</strong> ({exhibition.objects.length}{" "}
-              items)
-              <ul>
-                {exhibition.objects.map((obj) => (
-                  <li key={obj.id}>
-                    <img src={obj.image} alt={obj.title} width="50" />
-                    {obj.title} - {obj.artist}
-                  </li>
-                ))}
-              </ul>
-            </li>
+            <ExhibitionCard
+              key={exhibition.id}
+              exhibition={exhibition}
+              onDelete={() => setExhibitionToDelete(exhibition)}
+              onView={() => handleViewExhibition(exhibition.id)}
+            />
           ))}
-        </ul>
+        </div>
+      )}
+
+      {exhibitionToDelete && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h3>Delete Exhibition?</h3>
+            <p>Are you sure you want to delete "{exhibitionToDelete.name}"?</p>
+            <div className="modal-actions">
+              <button
+                onClick={() => handleDeleteExhibition(exhibitionToDelete.id)}
+              >
+                Yes, Delete
+              </button>
+              <button onClick={() => setExhibitionToDelete(null)}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </section>
   );
