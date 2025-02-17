@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { getExhibitions, addToExhibition } from "../utils/exhibitionStorage";
 import placeholderImage from "../assets/placeholder-image.jpg";
 
 function checkImageExists(imageUrl, callback) {
@@ -41,6 +42,14 @@ function ObjectCard({ object }) {
   const navigate = useNavigate();
   const [imageSrc, setImageSrc] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [newExhibitionName, setNewExhibitionName] = useState("");
+  const [selectedExhibition, setSelectedExhibition] = useState("");
+  const [exhibitions, setExhibitions] = useState([]);
+
+  useEffect(() => {
+    setExhibitions(getExhibitions());
+  }, []);
 
   const vaHighResImage = constructVAHighResImage(
     object._images?._iiif_image_base_url
@@ -63,7 +72,6 @@ function ObjectCard({ object }) {
 
     if (primaryImage) {
       setIsLoading(true);
-
       checkImageExists(primaryImage, (validPrimary) => {
         if (!isMounted) return;
 
@@ -108,12 +116,30 @@ function ObjectCard({ object }) {
     });
   };
 
+  const handleAddToExhibition = () => {
+    if (!newExhibitionName.trim() && !selectedExhibition) return;
+
+    const exhibitionName = newExhibitionName.trim() || selectedExhibition;
+    if (!exhibitionName) return;
+
+    const objectData = {
+      id: object.objectID || object.systemNumber,
+      title: object.title,
+      artist: object.artistDisplayName || "Unknown",
+      image: imageSrc || placeholderImage,
+    };
+
+    addToExhibition(exhibitionName, objectData);
+
+    setExhibitions(getExhibitions());
+
+    setNewExhibitionName("");
+    setSelectedExhibition("");
+    setShowModal(false);
+  };
+
   return (
-    <div
-      className="object-card"
-      onClick={handleClick}
-      style={{ cursor: "pointer" }}
-    >
+    <div className="object-card">
       {isLoading ? (
         <div className="loading-spinner">Loading...</div>
       ) : imageSrc ? (
@@ -121,6 +147,8 @@ function ObjectCard({ object }) {
           src={imageSrc}
           alt={object._primaryTitle || object.title || "Artwork"}
           width="150"
+          onClick={handleClick}
+          style={{ cursor: "pointer" }}
         />
       ) : (
         <div className="no-image">
@@ -132,6 +160,40 @@ function ObjectCard({ object }) {
       <p>{artistOrCulture}</p>
       {object.objectID && <p>Met Object ID: {object.objectID}</p>}
       {object.systemNumber && <p>V&A System Number: {object.systemNumber}</p>}
+
+      <button onClick={() => setShowModal(true)}>Add to Exhibition</button>
+
+      {showModal && (
+        <div className="modal">
+          <h3>Add to Exhibition</h3>
+          <label>
+            Create new exhibition:
+            <input
+              type="text"
+              value={newExhibitionName}
+              onChange={(e) => setNewExhibitionName(e.target.value)}
+            />
+          </label>
+
+          <label>
+            Or select existing:
+            <select
+              value={selectedExhibition}
+              onChange={(e) => setSelectedExhibition(e.target.value)}
+            >
+              <option value="">-- Select Exhibition --</option>
+              {exhibitions.map((exhibition) => (
+                <option key={exhibition.id} value={exhibition.name}>
+                  {exhibition.name} ({exhibition.objects.length} items)
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <button onClick={handleAddToExhibition}>Save</button>
+          <button onClick={() => setShowModal(false)}>Cancel</button>
+        </div>
+      )}
     </div>
   );
 }

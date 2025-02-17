@@ -95,7 +95,7 @@ export const getMetObjects = (query) => {
           .map((text) => String(text).toLowerCase())
           .join(" ");
 
-        const matches = queryWords.some((word) => objectText.includes(word));
+        const matches = queryWords.every((word) => objectText.includes(word));
 
         return matches;
       });
