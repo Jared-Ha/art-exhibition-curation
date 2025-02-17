@@ -42,18 +42,20 @@ export const getVAObjects = (query) => {
 export const getMetObjects = (query) => {
   const encodedQuery = encodeURIComponent(query);
 
-  console.log(
-    "The Met API URL:",
-    `${metApi.defaults.baseURL}/search?q=${encodedQuery}&hasImages=true`
-  );
+  console.log("Fetching Met search results for:", query);
 
   return metApi
-    .get("/search", { params: { q: encodedQuery, hasImages: true } })
+    .get("/search", {
+      params: {
+        q: encodedQuery,
+        hasImages: true,
+      },
+    })
     .then((searchResponse) => {
       if (!searchResponse.data.objectIDs) return [];
 
       const objectRequests = searchResponse.data.objectIDs
-        .slice(0, 10)
+        .slice(0, 40)
         .map((id) =>
           metApi
             .get(`/objects/${id}`)
@@ -63,7 +65,32 @@ export const getMetObjects = (query) => {
 
       return Promise.all(objectRequests);
     })
-    .then((responses) => responses.filter((res) => res !== null))
+    .then((responses) =>
+      responses.filter((obj) => {
+        if (!obj) return false;
+
+        const queryWords = query.toLowerCase().split(/\s+/);
+        const objectText = [
+          obj.title,
+          obj.medium,
+          obj.department,
+          obj.period, // Middle Kingdom, Second Intermediate Period
+          obj.country, // Egypt, France, USA
+          obj.region,
+          obj.artistDisplayName,
+          obj.artistAlphaSort,
+          obj.objectName, // "Painting", "Bust"
+          obj.classification, // "Sculpture", "Ceramics"
+          obj.constituents?.map((c) => c.role).join(" "),
+          obj.tags?.map((tag) => tag.term).join(" "),
+        ]
+          .filter(Boolean)
+          .map((text) => text.toLowerCase())
+          .join(" ");
+
+        return queryWords.every((word) => objectText.includes(word));
+      })
+    )
     .catch((error) => {
       console.error("Error fetching from The Met:", error);
       return [];
