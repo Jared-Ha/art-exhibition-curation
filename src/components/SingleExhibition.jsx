@@ -6,6 +6,7 @@ function SingleExhibition() {
   const { id } = useParams();
   const [exhibition, setExhibition] = useState(null);
   const [objectToRemove, setObjectToRemove] = useState(null);
+  const [selectedObject, setSelectedObject] = useState(null);
 
   useEffect(() => {
     const exhibitions = getExhibitions();
@@ -36,6 +37,7 @@ function SingleExhibition() {
     <section>
       <h2>{exhibition.name}</h2>
       <p>{exhibition.objects.length} items</p>
+      {console.log("here", exhibition)}
 
       <div className="exhibition-grid">
         {exhibition.objects.map((object) => (
@@ -48,7 +50,10 @@ function SingleExhibition() {
             <h3>{object.title}</h3>
             <p>{object.artistDisplayName || "Unknown Artist"}</p>
 
-            <button onClick={() => setObjectToRemove(object)}>Remove</button>
+            <div className="button-group">
+              <button onClick={() => setSelectedObject(object)}>View</button>
+              <button onClick={() => setObjectToRemove(object)}>Remove</button>
+            </div>
           </div>
         ))}
       </div>
@@ -66,6 +71,30 @@ function SingleExhibition() {
                 Yes, Remove
               </button>
               <button onClick={() => setObjectToRemove(null)}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {selectedObject && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h3>{selectedObject.title}</h3>
+            <p>
+              <strong>Artist:</strong>{" "}
+              {selectedObject.artistDisplayName || "Unknown Artist"}
+            </p>
+            <p>
+              <strong>Year:</strong> {selectedObject.objectDate || "Unknown"}
+            </p>
+            <img
+              src={selectedObject.primaryImage || selectedObject.image}
+              alt={selectedObject.title}
+              width="250"
+            />
+            <p>{selectedObject.description || "No description available."}</p>
+            <div className="modal-actions">
+              <button onClick={() => setSelectedObject(null)}>Close</button>
             </div>
           </div>
         </div>

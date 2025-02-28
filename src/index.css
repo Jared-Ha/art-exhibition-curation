@@ -38,9 +38,10 @@
   color: #3b5ef8;
 }
 
-.object-grid {
+.object-grid,
+.exhibition-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 20px;
   padding: 20px;
 }
@@ -80,12 +81,7 @@
 }
 
 /**/
-.exhibition-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 20px;
-  padding: 20px;
-}
+
 .exhibition-card {
   border: 1px solid #ddd;
   padding: 15px;
@@ -128,6 +124,10 @@
 
 .delete-exhibition-btn:hover {
   background-color: #e60000;
+}
+.button-group {
+  display: flex;
+  justify-content: space-around;
 }
 
 /* Confirmation modal styles */
@@ -197,6 +197,11 @@
 }
 .exhibition-actions {
   display: flex;
-  /* align-content: center; */
   justify-content: space-around;
+}
+
+/* Object Modal styles*/
+
+.modal img {
+  max-width: 100%;
 }
