@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { useSearch } from "../context/SearchContext";  Import global search state
+import { useSearch } from "../context/SearchContext";
 import { getExhibitions, addToExhibition } from "../utils/exhibitionStorage";
 import ObjectCard from "./ObjectCard";
 
 function ObjectList() {
-  const { searchTerm, objects, loading, searchAttempted } = useSearch(); 
+  const { searchTerm, objects, loading, searchAttempted } = useSearch();
   const [exhibitions, setExhibitions] = useState([]);
 
   useEffect(() => {
@@ -13,7 +13,7 @@ function ObjectList() {
 
   const handleAddToExhibition = (exhibitionName, object) => {
     addToExhibition(exhibitionName, object);
-    setExhibitions(getExhibitions()); 
+    setExhibitions(getExhibitions());
   };
 
   return (

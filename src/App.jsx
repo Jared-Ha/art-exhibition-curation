@@ -6,7 +6,7 @@ import CategoryList from "./components/CategoryList";
 import ExhibitionList from "./components/ExhibitionList";
 import SingleObject from "./components/SingleObject";
 import SingleExhibition from "./components/SingleExhibition";
-import { SearchProvider } from "./context/SearchContext"; // Import global provider
+import { SearchProvider } from "./context/SearchContext";
 
 function App() {
   return (
