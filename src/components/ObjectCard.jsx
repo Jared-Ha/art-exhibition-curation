@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import placeholderImage from "../assets/placeholder-image.jpg";
+import AddToExhibitionModal from "./AddToExhibitionModal";
 
 function checkImageExists(imageUrl, callback) {
   if (!imageUrl) return callback(null);
-
   fetch(imageUrl, { method: "HEAD" })
     .then((res) => {
       if (res.ok) {
@@ -165,53 +165,16 @@ function ObjectCard({ object, exhibitions, onAddToExhibition }) {
 
       <button onClick={() => setShowModal(true)}>Add to Exhibition</button>
 
-      {/* Popup Modal */}
-      {showModal && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <button className="close-modal" onClick={() => setShowModal(false)}>
-              ✖
-            </button>
-            <h3>Add to Exhibition</h3>
-
-            <label>
-              Create new exhibition:
-              <input
-                type="text"
-                value={newExhibitionName}
-                onChange={(e) => setNewExhibitionName(e.target.value)}
-              />
-            </label>
-
-            <label>
-              Or select existing:
-              <select
-                value={selectedExhibition}
-                onChange={(e) => setSelectedExhibition(e.target.value)}
-              >
-                <option value="">-- Select Exhibition --</option>
-                {exhibitions.map((exhibition) => (
-                  <option key={exhibition.id} value={exhibition.name}>
-                    {exhibition.name} ({exhibition.objects.length} items)
-                  </option>
-                ))}
-              </select>
-            </label>
-
-            <div className="modal-actions">
-              <button className="save-button" onClick={handleAddToExhibition}>
-                Save
-              </button>
-              <button
-                className="cancel-button"
-                onClick={() => setShowModal(false)}
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <AddToExhibitionModal
+        show={showModal}
+        onClose={() => setShowModal(false)}
+        newExhibitionName={newExhibitionName}
+        setNewExhibitionName={setNewExhibitionName}
+        selectedExhibition={selectedExhibition}
+        setSelectedExhibition={setSelectedExhibition}
+        exhibitions={exhibitions}
+        onSave={handleAddToExhibition}
+      />
     </div>
   );
 }

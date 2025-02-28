@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import placeholderImage from "../assets/placeholder-image.jpg";
 import { getVAObjectById, getMetObjectById } from "../api";
+import { getExhibitions, saveExhibitions } from "../utils/exhibitionStorage";
+import AddToExhibitionModal from "./AddToExhibitionModal";
 
 function SingleObject() {
   const { id } = useParams();
@@ -12,6 +14,16 @@ function SingleObject() {
   const [imageSrc, setImageSrc] = useState(
     location.state?.imageSrc || placeholderImage
   );
+
+  const [showModal, setShowModal] = useState(false);
+  const [newExhibitionName, setNewExhibitionName] = useState("");
+  const [selectedExhibition, setSelectedExhibition] = useState("");
+  const [exhibitions, setExhibitions] = useState([]);
+  const [addedConfirmationMessage, setAddedConfirmationMessage] = useState("");
+
+  useEffect(() => {
+    setExhibitions(getExhibitions());
+  }, []);
 
   useEffect(() => {
     const fetchObject = async () => {
@@ -51,6 +63,46 @@ function SingleObject() {
     fetchObject();
   }, [id, imageSrc]);
 
+  const handleAddToExhibition = () => {
+    if (!newExhibitionName.trim() && !selectedExhibition) return;
+
+    const exhibitionName = newExhibitionName.trim() || selectedExhibition;
+    if (!exhibitionName) return;
+
+    const objectData = {
+      ...object,
+      image: imageSrc || placeholderImage,
+    };
+
+    const updatedExhibitions = getExhibitions();
+    const existingExhibition = updatedExhibitions.find(
+      (ex) => ex.name === exhibitionName
+    );
+
+    if (existingExhibition) {
+      existingExhibition.objects.push(objectData);
+    } else {
+      updatedExhibitions.push({
+        id: `exhibition-${Date.now()}`,
+        name: exhibitionName,
+        objects: [objectData],
+      });
+    }
+
+    saveExhibitions(updatedExhibitions);
+    setExhibitions(updatedExhibitions);
+
+    setAddedConfirmationMessage(
+      `Added to your exhibition: "${exhibitionName}"`
+    );
+
+    setShowModal(false);
+    setNewExhibitionName("");
+    setSelectedExhibition("");
+
+    setTimeout(() => setAddedConfirmationMessage(""), 3000);
+  };
+
   if (loading) return <p>Loading...</p>;
   if (!object) return <p>No record found.</p>;
 
@@ -75,7 +127,7 @@ function SingleObject() {
         ← Back
       </button>
 
-      <img src={imageSrc} alt={object.title || "Artwork"} width="500" />
+      <img src={imageSrc} alt={object.title || "Artwork"} />
       <h2>{object.title || object.record?.titles?.[0]?.title || "Untitled"}</h2>
       <p>
         <strong>Artist:</strong>{" "}
@@ -115,6 +167,23 @@ function SingleObject() {
           View on Museum Site
         </a>
       ) : null}
+
+      {addedConfirmationMessage && (
+        <p className="added-confirmation-message">{addedConfirmationMessage}</p>
+      )}
+
+      <button onClick={() => setShowModal(true)}>Add to Exhibition</button>
+
+      <AddToExhibitionModal
+        show={showModal}
+        onClose={() => setShowModal(false)}
+        newExhibitionName={newExhibitionName}
+        setNewExhibitionName={setNewExhibitionName}
+        selectedExhibition={selectedExhibition}
+        setSelectedExhibition={setSelectedExhibition}
+        exhibitions={exhibitions}
+        onSave={handleAddToExhibition}
+      />
     </div>
   );
 }
