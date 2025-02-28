@@ -131,7 +131,6 @@
 }
 
 /* Confirmation modal styles */
-
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -146,39 +145,71 @@
 }
 
 .modal {
-  background: #fff;
+  background: #ffffff;
   padding: 20px;
-  border-radius: 8px;
-  width: 50%;
+  border-radius: 10px;
+  width: 300px;
   text-align: center;
-  box-shadow: 0 4px 10px #00000017;
+  position: relative;
+  box-shadow: 0px 4px 10px #00000040;
 }
 
-.modal h3 {
-  margin-top: 0;
+.close-modal {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  border: none;
+  background: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #555555;
+}
+
+.close-modal:hover {
+  color: #000;
+}
+
+.modal label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+  color: #222222;
+}
+
+.modal input,
+.modal select {
+  width: 90%;
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #cccccc;
+  border-radius: 5px;
+  background: #ffffff;
+  color: #333333;
 }
 
 .modal-actions {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   margin-top: 20px;
-}
-
-.modal-actions button {
-  padding: 10px 15px;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-  border-radius: 5px;
+  gap: 10px;
 }
 
 .modal-actions button:first-child {
-  background: #ff4d4d;
-  color: #fff;
+  background: #ff0000;
+  color: #ffffff;
+}
+
+.modal-actions button:first-child:hover {
+  background: #b10000;
 }
 
 .modal-actions button:last-child {
-  background: #ddd;
+  background: #dddddd;
+  color: #333333;
+}
+
+.modal-actions button:last-child:hover {
+  background: #cccccc;
 }
 
 .added-confirmation-message {
@@ -198,6 +229,38 @@
 .exhibition-actions {
   display: flex;
   justify-content: space-around;
+  gap: 10px;
+}
+.exhibition-actions button{flex: 1;
+
+.modal-actions button {
+  flex: 1;
+  padding: 10px 15px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: 5px;
+  text-align: center;
+}
+
+/* Save Button */
+.save-button {
+  background: #3b5ef8;
+  color: #ffffff;
+}
+
+.save-button:hover {
+  background: #2a4bc6;
+}
+
+/* Cancel Button */
+.cancel-button {
+  background: #dddddd;
+  color: #333333;
+}
+
+.cancel-button:hover {
+  background: #cccccc;
 }
 
 /* Object Modal styles*/

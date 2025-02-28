@@ -44,7 +44,7 @@ function ObjectCard({ object, exhibitions, onAddToExhibition }) {
   const [showModal, setShowModal] = useState(false);
   const [newExhibitionName, setNewExhibitionName] = useState("");
   const [selectedExhibition, setSelectedExhibition] = useState("");
-  const [addedConfirmationMessage, setaddedConfirmationMessage] = useState("");
+  const [addedConfirmationMessage, setAddedConfirmationMessage] = useState("");
 
   const vaHighResImage = constructVAHighResImage(
     object._images?._iiif_image_base_url
@@ -124,13 +124,15 @@ function ObjectCard({ object, exhibitions, onAddToExhibition }) {
 
     onAddToExhibition(exhibitionName, objectData);
 
-    setaddedConfirmationMessage(`Added to your exhibiton: "${exhibitionName}"`);
+    setAddedConfirmationMessage(
+      `Added to your exhibition: "${exhibitionName}"`
+    );
 
     setShowModal(false);
     setNewExhibitionName("");
     setSelectedExhibition("");
 
-    setTimeout(() => setaddedConfirmationMessage(""), 3000);
+    setTimeout(() => setAddedConfirmationMessage(""), 3000);
   };
 
   return (
@@ -161,36 +163,51 @@ function ObjectCard({ object, exhibitions, onAddToExhibition }) {
 
       <button onClick={() => setShowModal(true)}>Add to Exhibition</button>
 
+      {/* Popup Modal */}
       {showModal && (
-        <div className="modal">
-          <h3>Add to Exhibition</h3>
+        <div className="modal-overlay">
+          <div className="modal">
+            <button className="close-modal" onClick={() => setShowModal(false)}>
+              ✖
+            </button>
+            <h3>Add to Exhibition</h3>
 
-          <label>
-            Create new exhibition:
-            <input
-              type="text"
-              value={newExhibitionName}
-              onChange={(e) => setNewExhibitionName(e.target.value)}
-            />
-          </label>
+            <label>
+              Create new exhibition:
+              <input
+                type="text"
+                value={newExhibitionName}
+                onChange={(e) => setNewExhibitionName(e.target.value)}
+              />
+            </label>
 
-          <label>
-            Or select existing:
-            <select
-              value={selectedExhibition}
-              onChange={(e) => setSelectedExhibition(e.target.value)}
-            >
-              <option value="">-- Select Exhibition --</option>
-              {exhibitions.map((exhibition) => (
-                <option key={exhibition.id} value={exhibition.name}>
-                  {exhibition.name} ({exhibition.objects.length} items)
-                </option>
-              ))}
-            </select>
-          </label>
+            <label>
+              Or select existing:
+              <select
+                value={selectedExhibition}
+                onChange={(e) => setSelectedExhibition(e.target.value)}
+              >
+                <option value="">-- Select Exhibition --</option>
+                {exhibitions.map((exhibition) => (
+                  <option key={exhibition.id} value={exhibition.name}>
+                    {exhibition.name} ({exhibition.objects.length} items)
+                  </option>
+                ))}
+              </select>
+            </label>
 
-          <button onClick={handleAddToExhibition}>Save</button>
-          <button onClick={() => setShowModal(false)}>Cancel</button>
+            <div className="modal-actions">
+              <button className="save-button" onClick={handleAddToExhibition}>
+                Save
+              </button>
+              <button
+                className="cancel-button"
+                onClick={() => setShowModal(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

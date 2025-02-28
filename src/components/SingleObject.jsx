@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import placeholderImage from "../assets/placeholder-image.jpg";
 import { getVAObjectById, getMetObjectById } from "../api";
 
 function SingleObject() {
   const { id } = useParams();
   const location = useLocation();
+  const navigate = useNavigate();
   const [object, setObject] = useState(null);
   const [loading, setLoading] = useState(true);
   const [imageSrc, setImageSrc] = useState(
@@ -70,6 +71,10 @@ function SingleObject() {
 
   return (
     <div className="single-object">
+      <button onClick={() => navigate(-1)} className="back-button">
+        ← Back
+      </button>
+
       <img src={imageSrc} alt={object.title || "Artwork"} width="500" />
       <h2>{object.title || object.record?.titles?.[0]?.title || "Untitled"}</h2>
       <p>
