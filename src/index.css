@@ -130,7 +130,7 @@
   background-color: #e60000;
 }
 
-/* Delete conf modal styles */
+/* Confirmation modal styles */
 
 .modal-overlay {
   position: fixed;
@@ -149,6 +149,7 @@
   background: #fff;
   padding: 20px;
   border-radius: 8px;
+  width: 50%;
   text-align: center;
   box-shadow: 0 4px 10px #00000017;
 }
@@ -178,4 +179,24 @@
 
 .modal-actions button:last-child {
   background: #ddd;
+}
+
+.added-confirmation-message {
+  color: green;
+}
+.delete-button {
+  color: #777777 !important;
+  outline: solid 1px #afafaf;
+  border-radius: 4px;
+  border: none;
+}
+.delete-button:hover {
+  color: #000 !important;
+  outline: solid 1px #ff3e3e;
+  background: #ffc9c9;
+}
+.exhibition-actions {
+  display: flex;
+  /* align-content: center; */
+  justify-content: space-around;
 }

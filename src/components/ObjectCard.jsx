@@ -44,6 +44,7 @@ function ObjectCard({ object, exhibitions, onAddToExhibition }) {
   const [showModal, setShowModal] = useState(false);
   const [newExhibitionName, setNewExhibitionName] = useState("");
   const [selectedExhibition, setSelectedExhibition] = useState("");
+  const [addedConfirmationMessage, setaddedConfirmationMessage] = useState("");
 
   const vaHighResImage = constructVAHighResImage(
     object._images?._iiif_image_base_url
@@ -116,7 +117,6 @@ function ObjectCard({ object, exhibitions, onAddToExhibition }) {
     const exhibitionName = newExhibitionName.trim() || selectedExhibition;
     if (!exhibitionName) return;
 
-    // Store the full object in localStorage
     const objectData = {
       ...object,
       image: imageSrc || placeholderImage,
@@ -124,9 +124,13 @@ function ObjectCard({ object, exhibitions, onAddToExhibition }) {
 
     onAddToExhibition(exhibitionName, objectData);
 
+    setaddedConfirmationMessage(`Added to your exhibiton: "${exhibitionName}"`);
+
+    setShowModal(false);
     setNewExhibitionName("");
     setSelectedExhibition("");
-    setShowModal(false);
+
+    setTimeout(() => setaddedConfirmationMessage(""), 3000);
   };
 
   return (
@@ -137,7 +141,6 @@ function ObjectCard({ object, exhibitions, onAddToExhibition }) {
         <img
           src={imageSrc}
           alt={object._primaryTitle || object.title || "Artwork"}
-          width="150"
           onClick={handleClick}
           style={{ cursor: "pointer" }}
         />
@@ -152,11 +155,16 @@ function ObjectCard({ object, exhibitions, onAddToExhibition }) {
       {object.objectID && <p>Met Object ID: {object.objectID}</p>}
       {object.systemNumber && <p>V&A System Number: {object.systemNumber}</p>}
 
+      {addedConfirmationMessage && (
+        <p className="added-confirmation-message">{addedConfirmationMessage}</p>
+      )}
+
       <button onClick={() => setShowModal(true)}>Add to Exhibition</button>
 
       {showModal && (
         <div className="modal">
           <h3>Add to Exhibition</h3>
+
           <label>
             Create new exhibition:
             <input

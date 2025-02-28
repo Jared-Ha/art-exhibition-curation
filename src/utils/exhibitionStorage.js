@@ -45,7 +45,6 @@ export const addToExhibition = (exhibitionName, object) => {
     exhibitions.push(exhibition);
   }
 
-  // Define a standardized object ID for consistency
   const objectId = object.objectID || object.systemNumber || object.id;
 
   if (!objectId) {
@@ -53,14 +52,12 @@ export const addToExhibition = (exhibitionName, object) => {
     return;
   }
 
-  // Prevent duplicate objects
   const isDuplicate = exhibition.objects.some((obj) => obj.id === objectId);
 
   if (!isDuplicate) {
-    // Store object with a consistent `id`
     const objectData = {
       ...object,
-      id: objectId, // Ensure ID is standardized
+      id: objectId,
     };
 
     exhibition.objects.push(objectData);
@@ -71,7 +68,6 @@ export const addToExhibition = (exhibitionName, object) => {
   }
 };
 
-// ✅ Delete an exhibition by name
 export const deleteExhibition = (exhibitionId) => {
   let exhibitions = getExhibitions();
   exhibitions = exhibitions.filter(
