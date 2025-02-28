@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { getExhibitions, saveExhibitions } from "../utils/exhibitionStorage";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 
 function SingleExhibition() {
   const { id } = useParams();
@@ -37,7 +39,6 @@ function SingleExhibition() {
     <section>
       <h2>{exhibition.name}</h2>
       <p>{exhibition.objects.length} items</p>
-      {console.log("here", exhibition)}
 
       <div className="exhibition-grid">
         {exhibition.objects.map((object) => (
@@ -58,6 +59,7 @@ function SingleExhibition() {
         ))}
       </div>
 
+      {/* Remove Object Modal */}
       {objectToRemove && (
         <div className="modal-overlay">
           <div className="modal">
@@ -67,34 +69,88 @@ function SingleExhibition() {
               {exhibition.name}"?
             </p>
             <div className="modal-actions">
-              <button onClick={() => handleRemoveObject(objectToRemove.id)}>
+              <button
+                className="save-button"
+                onClick={() => handleRemoveObject(objectToRemove.id)}
+              >
                 Yes, Remove
               </button>
-              <button onClick={() => setObjectToRemove(null)}>Cancel</button>
+              <button
+                className="cancel-button"
+                onClick={() => setObjectToRemove(null)}
+              >
+                Cancel
+              </button>
             </div>
           </div>
         </div>
       )}
 
+      {/* View Object Modal */}
       {selectedObject && (
         <div className="modal-overlay">
           <div className="modal">
-            <h3>{selectedObject.title}</h3>
-            <p>
-              <strong>Artist:</strong>{" "}
-              {selectedObject.artistDisplayName || "Unknown Artist"}
-            </p>
-            <p>
-              <strong>Year:</strong> {selectedObject.objectDate || "Unknown"}
-            </p>
+            <button
+              className="close-modal"
+              onClick={() => setSelectedObject(null)}
+            >
+              ✖
+            </button>
+            <h3>{selectedObject.title || "Untitled"}</h3>
             <img
               src={selectedObject.primaryImage || selectedObject.image}
               alt={selectedObject.title}
               width="250"
             />
-            <p>{selectedObject.description || "No description available."}</p>
+
+            <p>
+              <strong>Artist:</strong>{" "}
+              {selectedObject.artistDisplayName || "Unknown Artist"}
+            </p>
+            <p>
+              <strong>Artist Bio:</strong>{" "}
+              {selectedObject.artistDisplayBio || "No bio available"}
+            </p>
+            <p>
+              <strong>Date:</strong> {selectedObject.objectDate || "Unknown"}
+            </p>
+            <p>
+              <strong>Medium:</strong>{" "}
+              {selectedObject.medium || "Not specified"}
+            </p>
+            <p>
+              <strong>Dimensions:</strong>{" "}
+              {selectedObject.dimensions || "Not specified"}
+            </p>
+            <p>
+              <strong>Description:</strong>{" "}
+              {selectedObject.description ||
+                selectedObject.physicalDescription ||
+                selectedObject.briefDescription ||
+                "No description available."}
+            </p>
+
+            {selectedObject.objectURL && (
+              <p>
+                <a
+                  href={selectedObject.objectURL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="external-link"
+                >
+                  View on Museum Site{" "}
+                  <FontAwesomeIcon icon={faUpRightFromSquare} />
+                </a>
+              </p>
+            )}
+
             <div className="modal-actions">
-              <button onClick={() => setSelectedObject(null)}>Close</button>
+              <button
+                className="cancel-button"
+                onClick={() => setSelectedObject(null)}
+              >
+                Close
+              </button>
             </div>
           </div>
         </div>

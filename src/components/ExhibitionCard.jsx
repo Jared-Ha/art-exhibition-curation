@@ -4,18 +4,23 @@ function ExhibitionCard({ exhibition, onDelete, onView }) {
   return (
     <div className="exhibition-card">
       <div className="exhibition-info">
-        <h3>{exhibition.name}</h3>
+        <h3 onClick={() => onView(exhibition.id)}>{exhibition.name}</h3>
         <p>({exhibition.objects.length} items)</p>
       </div>
 
       <div className="exhibition-thumbnails">
         {exhibition.objects.slice(0, 5).map((obj) => (
-          <img
+          <div
             key={obj.id}
-            src={obj.primaryImage || obj.image}
-            alt={obj.title}
-            className="exhibition-thumbnail"
-          />
+            className="thumbnail-wrapper"
+            onClick={() => onView(exhibition.id)}
+          >
+            <img
+              src={obj.primaryImage || obj.image}
+              alt={obj.title}
+              className="exhibition-thumbnail"
+            />
+          </div>
         ))}
       </div>
 

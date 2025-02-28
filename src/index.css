@@ -89,6 +89,13 @@
   margin-bottom: 15px;
   background-color: #f9f9f9;
 }
+.exhibition-info{
+  cursor: pointer;
+}
+.exhibition-info:hover{
+  color: #0b0977;
+}
+
 
 .exhibition-header {
   display: flex;
