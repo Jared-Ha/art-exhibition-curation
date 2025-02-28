@@ -43,17 +43,27 @@ function SingleExhibition() {
       <div className="exhibition-grid">
         {exhibition.objects.map((object) => (
           <div key={object.id} className="object-card">
-            <img
-              src={object.primaryImage || object.image}
-              alt={object.title}
-              width="150"
-            />
+            <div
+              className="clickable-image"
+              onClick={() => setSelectedObject(object)}
+            >
+              <img
+                src={object.primaryImage || object.image}
+                alt={object.title}
+                width="150"
+              />
+            </div>
             <h3>{object.title}</h3>
             <p>{object.artistDisplayName || "Unknown Artist"}</p>
 
             <div className="button-group">
               <button onClick={() => setSelectedObject(object)}>View</button>
-              <button onClick={() => setObjectToRemove(object)}>Remove</button>
+              <button
+                className="delete-button"
+                onClick={() => setObjectToRemove(object)}
+              >
+                Remove
+              </button>
             </div>
           </div>
         ))}
@@ -70,7 +80,7 @@ function SingleExhibition() {
             </p>
             <div className="modal-actions">
               <button
-                className="save-button"
+                className="delete-confirm-btn"
                 onClick={() => handleRemoveObject(objectToRemove.id)}
               >
                 Yes, Remove
@@ -89,7 +99,7 @@ function SingleExhibition() {
       {/* View Object Modal */}
       {selectedObject && (
         <div className="modal-overlay">
-          <div className="modal">
+          <div className="modal view-exhibition-object">
             <button
               className="close-modal"
               onClick={() => setSelectedObject(null)}

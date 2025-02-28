@@ -78,11 +78,15 @@ function ExhibitionList() {
             <p>Are you sure you want to delete "{exhibitionToDelete.name}"?</p>
             <div className="modal-actions">
               <button
+                className="delete-confirm-btn"
                 onClick={() => handleDeleteExhibition(exhibitionToDelete.id)}
               >
                 Yes, Delete
               </button>
-              <button onClick={() => setExhibitionToDelete(null)}>
+              <button
+                className="cancel-button"
+                onClick={() => setExhibitionToDelete(null)}
+              >
                 Cancel
               </button>
             </div>

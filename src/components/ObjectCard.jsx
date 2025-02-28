@@ -140,12 +140,14 @@ function ObjectCard({ object, exhibitions, onAddToExhibition }) {
       {isLoading ? (
         <div className="loading-spinner">Loading...</div>
       ) : imageSrc ? (
-        <img
-          src={imageSrc}
-          alt={object._primaryTitle || object.title || "Artwork"}
-          onClick={handleClick}
-          style={{ cursor: "pointer" }}
-        />
+        <div className="clickable-image">
+          <img
+            src={imageSrc}
+            alt={object._primaryTitle || object.title || "Artwork"}
+            onClick={handleClick}
+            style={{ cursor: "pointer" }}
+          />
+        </div>
       ) : (
         <div className="no-image">
           <img src={placeholderImage} alt="No Image Available" width="150" />
