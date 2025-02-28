@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSearch } from "../context/SearchContext";
 
-function Search({ setSearchTerm }) {
+function Search() {
   const [searchInput, setSearchInput] = useState("");
   const navigate = useNavigate();
+  const { performSearch } = useSearch();
 
   const handleChange = (event) => {
     setSearchInput(event.target.value);
@@ -12,7 +14,8 @@ function Search({ setSearchTerm }) {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (!searchInput.trim()) return;
-    setSearchTerm(searchInput.trim());
+
+    performSearch(searchInput.trim());
     setSearchInput("");
     navigate("/");
   };

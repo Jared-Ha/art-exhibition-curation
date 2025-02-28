@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import Search from "./components/Search";
@@ -7,22 +6,21 @@ import CategoryList from "./components/CategoryList";
 import ExhibitionList from "./components/ExhibitionList";
 import SingleObject from "./components/SingleObject";
 import SingleExhibition from "./components/SingleExhibition";
+import { SearchProvider } from "./context/SearchContext"; // Import global provider
 
 function App() {
-  const [searchTerm, setSearchTerm] = useState("");
-
   return (
-    <>
+    <SearchProvider>
       <Header />
-      <Search setSearchTerm={setSearchTerm} />
+      <Search />
       <Routes>
-        <Route path="/" element={<ObjectList searchTerm={searchTerm} />} />
+        <Route path="/" element={<ObjectList />} />
         <Route path="/object/:id" element={<SingleObject />} />
         <Route path="/my-exhibitions" element={<ExhibitionList />} />
         <Route path="/exhibition/:id" element={<SingleExhibition />} />
         <Route path="/categories" element={<CategoryList />} />
       </Routes>
-    </>
+    </SearchProvider>
   );
 }
 

@@ -1,35 +1,19 @@
-import { useState, useEffect } from "react";
-import { getVAObjects, getMetObjects } from "../api";
+import { useEffect, useState } from "react";
+import { useSearch } from "../context/SearchContext";  Import global search state
 import { getExhibitions, addToExhibition } from "../utils/exhibitionStorage";
 import ObjectCard from "./ObjectCard";
 
-function ObjectList({ searchTerm }) {
-  const [objects, setObjects] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [searchAttempted, setSearchAttempted] = useState(false);
+function ObjectList() {
+  const { searchTerm, objects, loading, searchAttempted } = useSearch(); 
   const [exhibitions, setExhibitions] = useState([]);
 
   useEffect(() => {
     setExhibitions(getExhibitions());
   }, []);
 
-  useEffect(() => {
-    if (!searchTerm) return;
-
-    setLoading(true);
-    setSearchAttempted(true);
-
-    Promise.all([getVAObjects(searchTerm), getMetObjects(searchTerm)])
-      .then(([vaResults, metResults]) =>
-        setObjects([...vaResults, ...metResults])
-      )
-      .catch((error) => console.error("Error fetching data:", error))
-      .finally(() => setLoading(false));
-  }, [searchTerm]);
-
   const handleAddToExhibition = (exhibitionName, object) => {
     addToExhibition(exhibitionName, object);
-    setExhibitions(getExhibitions());
+    setExhibitions(getExhibitions()); 
   };
 
   return (
@@ -44,6 +28,7 @@ function ObjectList({ searchTerm }) {
       {!loading && searchAttempted && objects.length === 0 && (
         <p>No results found</p>
       )}
+
       <ul className="object-grid">
         {objects.length > 0 &&
           objects.map((obj, index) => (

@@ -61,6 +61,13 @@ function SingleObject() {
       : object.record.dimensions
     : object.dimensions || "Not specified";
 
+  const isVAObject = id.startsWith("O");
+  const description = isVAObject
+    ? object.record?.physicalDescription ||
+      object.record?.briefDescription ||
+      "No description available."
+    : object.classification || object.objectName || "No description available.";
+
   return (
     <div className="single-object">
       <img src={imageSrc} alt={object.title || "Artwork"} width="500" />
@@ -70,6 +77,10 @@ function SingleObject() {
         {object.artistDisplayName ||
           object.record?.artistMakerPerson?.[0]?.name?.text ||
           "Unknown"}
+      </p>
+      <p>
+        <strong>Artist Bio:</strong>{" "}
+        {object.artistDisplayBio || "No artist bio available"}
       </p>
       <p>
         <strong>Date:</strong>{" "}
@@ -86,6 +97,10 @@ function SingleObject() {
       <p>
         <strong>Dimensions:</strong> {formattedDimensions}
       </p>
+      <p>
+        <strong>Description:</strong> {description}
+      </p>
+
       {object.objectURL || object.meta?._links?.collection_page?.href ? (
         <a
           href={object.objectURL || object.meta?._links?.collection_page?.href}
