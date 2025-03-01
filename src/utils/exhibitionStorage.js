@@ -36,7 +36,6 @@ export const addToExhibition = (exhibitionName, object) => {
   let exhibition = exhibitions.find((ex) => ex.name === exhibitionName);
 
   if (!exhibition) {
-    // Create new exhibition if it doesn't exist
     exhibition = {
       id: `exhibition-${Date.now()}`,
       name: exhibitionName,
@@ -48,24 +47,25 @@ export const addToExhibition = (exhibitionName, object) => {
   const objectId = object.objectID || object.systemNumber || object.id;
 
   if (!objectId) {
-    console.error("⚠️ Object has no valid ID:", object);
-    return;
+    return "Object has no ID";
   }
 
   const isDuplicate = exhibition.objects.some((obj) => obj.id === objectId);
 
+  let message = "";
   if (!isDuplicate) {
     const objectData = {
       ...object,
       id: objectId,
     };
-
     exhibition.objects.push(objectData);
     saveExhibitions(exhibitions);
-    console.log(`✅ Added object to exhibition: ${exhibitionName}`, objectData);
+    message = `Added to your exhibition: "${exhibitionName}"`;
   } else {
-    console.warn("⚠️ Object already exists in the exhibition.");
+    message = `Object already exists in the exhibition: "${exhibitionName}"`;
   }
+  console.log("addToExhibition returns:", message);
+  return message;
 };
 
 export const deleteExhibition = (exhibitionId) => {

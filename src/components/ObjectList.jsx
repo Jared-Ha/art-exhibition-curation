@@ -12,8 +12,9 @@ function ObjectList() {
   }, []);
 
   const handleAddToExhibition = (exhibitionName, object) => {
-    addToExhibition(exhibitionName, object);
+    const message = addToExhibition(exhibitionName, object);
     setExhibitions(getExhibitions());
+    return message;
   };
 
   return (

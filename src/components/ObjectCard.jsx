@@ -122,11 +122,8 @@ function ObjectCard({ object, exhibitions, onAddToExhibition }) {
       image: imageSrc || placeholderImage,
     };
 
-    onAddToExhibition(exhibitionName, objectData);
-
-    setAddedConfirmationMessage(
-      `Added to your exhibition: "${exhibitionName}"`
-    );
+    const message = onAddToExhibition(exhibitionName, objectData);
+    setAddedConfirmationMessage(message);
 
     setShowModal(false);
     setNewExhibitionName("");
