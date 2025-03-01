@@ -1,17 +1,18 @@
 import { useState, useEffect } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import placeholderImage from "../assets/placeholder-image.jpg";
-// import { getVAObjectById, getMetObjectById } from "../api";
+import { getVAObjectById, getMetObjectById } from "../api";
 import { getExhibitions, addToExhibition } from "../utils/exhibitionStorage";
 import AddToExhibitionModal from "./AddToExhibitionModal";
 import { useSearch } from "../context/SearchContext";
 
 function getObjectId(object) {
-  return object.objectID || object.systemNumber || object.id;
+  return object.objectID || object.record.systemNumber || object.id;
 }
 
 function SingleObject() {
   const { id } = useParams();
+  console.log(id);
   const location = useLocation();
   const navigate = useNavigate();
   const { objects: contextObjects } = useSearch();
@@ -30,24 +31,60 @@ function SingleObject() {
   const [newExhibitionName, setNewExhibitionName] = useState("");
   const [selectedExhibition, setSelectedExhibition] = useState("");
   const [exhibitions, setExhibitions] = useState([]);
-  const [addedConfirmationMessage, setAddedConfirmationMessage] = useState("");
+  const [addedConfirmationMessage, setAddedConfirmationMessage] =
+    useState(null);
 
   useEffect(() => {
     setExhibitions(getExhibitions());
   }, []);
+
+  useEffect(() => {
+    const isVAObject = id.startsWith("O");
+    const fetchFn = isVAObject ? getVAObjectById : getMetObjectById;
+    setLoading(true);
+    fetchFn(id)
+      .then((data) => {
+        console.log("Fetched detailed object data:", data);
+        setObject(data || null);
+        if (isVAObject) {
+          const vaHighResImage = data?.meta?.images?._iiif_image
+            ? `${data.meta.images._iiif_image}full/full/0/default.jpg`
+            : null;
+          setImageSrc(
+            vaHighResImage ||
+              data?.meta?.images?._primary_thumbnail ||
+              placeholderImage
+          );
+        } else {
+          // For MET objects, if there's an image passed via route state, use it.
+          setImageSrc(
+            location.state?.imageSrc ||
+              data.primaryImage ||
+              data.primaryImageSmall ||
+              placeholderImage
+          );
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching object:", error);
+        setObject(null);
+      })
+      .finally(() => setLoading(false));
+  }, [id]);
+
   const localAddToExhibition = () => {
     if (!newExhibitionName.trim() && !selectedExhibition) return;
     const exhibitionName = newExhibitionName.trim() || selectedExhibition;
     if (!exhibitionName) return;
 
-    const objectData = {
-      ...object,
-      image: imageSrc || placeholderImage,
-    };
+    const objectData = id.startsWith("O")
+      ? { ...object.record, image: imageSrc || placeholderImage }
+      : { ...object, image: imageSrc || placeholderImage };
 
     const result = addToExhibition(exhibitionName, objectData);
-    console.log("Result returned to ObjectCard:", result);
     setAddedConfirmationMessage(result);
+
+    setExhibitions(getExhibitions());
 
     setShowModal(false);
     setNewExhibitionName("");

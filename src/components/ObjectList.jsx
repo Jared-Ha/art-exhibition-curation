@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useSearch } from "../context/SearchContext";
 import { getExhibitions, addToExhibition } from "../utils/exhibitionStorage";
 import ObjectCard from "./ObjectCard";
+import { getSortDate } from "../utils/getSortDate";
 
 const RESULTS_PER_PAGE = 10;
 
@@ -10,25 +11,29 @@ function ObjectList() {
   const [exhibitions, setExhibitions] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
+  // Sorting criteria: only "date" for now
+  const [sortCriteria, setSortCriteria] = useState("date");
+  const [sortOrder, setSortOrder] = useState("asc");
+
   useEffect(() => {
     setExhibitions(getExhibitions());
   }, []);
 
-  const handleAddToExhibition = (exhibitionName, object) => {
-    const result = addToExhibition(exhibitionName, object);
-    setExhibitions(getExhibitions());
-    return result;
-  };
+  const sortedObjects = [...objects].sort((a, b) => {
+    if (sortCriteria === "date") {
+      const dateA = getSortDate(a);
+      const dateB = getSortDate(b);
+      return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
+    }
+    return 0;
+  });
 
-  // Calculate the items to display on the current page
+  // Calculate the items to display on the current page.
   const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
   const endIndex = startIndex + RESULTS_PER_PAGE;
-  const currentObjects = objects.slice(startIndex, endIndex);
+  const currentObjects = sortedObjects.slice(startIndex, endIndex);
 
-  // Determine total pages
   const totalPages = Math.ceil(objects.length / RESULTS_PER_PAGE);
-
-  // Calculate result numbers for display
   const startResult = objects.length > 0 ? startIndex + 1 : 0;
   const endResult = Math.min(currentPage * RESULTS_PER_PAGE, objects.length);
 
@@ -44,6 +49,12 @@ function ObjectList() {
       setCurrentPage((prev) => prev - 1);
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
+  };
+
+  const handleAddToExhibition = (exhibitionName, object) => {
+    const result = addToExhibition(exhibitionName, object);
+    setExhibitions(getExhibitions());
+    return result;
   };
 
   return (
@@ -63,6 +74,34 @@ function ObjectList() {
       {!loading && searchAttempted && objects.length === 0 && (
         <p>No results found</p>
       )}
+
+      {/* Sorting controls */}
+      <div className="sorting-controls">
+        <label htmlFor="sortCriteria">Sort by: </label>
+        <select
+          id="sortCriteria"
+          value={sortCriteria}
+          onChange={(e) => {
+            setSortCriteria(e.target.value);
+            setCurrentPage(1);
+          }}
+        >
+          <option value="date">Date</option>
+          {/* Future criteria can be added here */}
+        </select>
+        <label htmlFor="sortOrder"> Order: </label>
+        <select
+          id="sortOrder"
+          value={sortOrder}
+          onChange={(e) => {
+            setSortOrder(e.target.value);
+            setCurrentPage(1);
+          }}
+        >
+          <option value="asc">Ascending</option>
+          <option value="desc">Descending</option>
+        </select>
+      </div>
 
       <ul className="object-grid">
         {currentObjects.map((obj, index) => (

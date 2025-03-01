@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import placeholderImage from "../assets/placeholder-image.jpg";
 import AddToExhibitionModal from "./AddToExhibitionModal";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 function checkImageExists(imageUrl, callback) {
   if (!imageUrl) return callback(null);
@@ -69,14 +71,12 @@ function ObjectCard({ object, exhibitions, onAddToExhibition }) {
       setIsLoading(true);
       checkImageExists(primaryImage, (validPrimary) => {
         if (!isMounted) return;
-
         if (validPrimary) {
           setImageSrc(validPrimary);
           setIsLoading(false);
         } else {
           checkImageExists(object.primaryImageSmall, (validSmall) => {
             if (!isMounted) return;
-
             if (validSmall) {
               setImageSrc(validSmall);
               setIsLoading(false);
@@ -107,9 +107,10 @@ function ObjectCard({ object, exhibitions, onAddToExhibition }) {
 
   const handleClick = () => {
     navigate(`/object/${object.objectID || object.systemNumber}`, {
-      state: { imageSrc },
+      state: { object, imageSrc },
     });
   };
+
   const localAddToExhibition = () => {
     if (!newExhibitionName.trim() && !selectedExhibition) return;
     const exhibitionName = newExhibitionName.trim() || selectedExhibition;
@@ -121,7 +122,6 @@ function ObjectCard({ object, exhibitions, onAddToExhibition }) {
     };
 
     const result = onAddToExhibition(exhibitionName, objectData);
-    console.log("Result returned to ObjectCard:", result);
     setAddedConfirmationMessage(result);
 
     setShowModal(false);
@@ -134,7 +134,9 @@ function ObjectCard({ object, exhibitions, onAddToExhibition }) {
   return (
     <div className="object-card">
       {isLoading ? (
-        <div className="loading-spinner">Loading...</div>
+        <div className="loading-spinner">
+          <FontAwesomeIcon icon={faSpinner} spin size="2x" />
+        </div>
       ) : imageSrc ? (
         <div className="clickable-image">
           <img
@@ -152,6 +154,13 @@ function ObjectCard({ object, exhibitions, onAddToExhibition }) {
       )}
       <h3>{object._primaryTitle || object.title}</h3>
       <p>{artistOrCulture}</p>
+      <p>
+        <strong>Date:</strong>{" "}
+        {object.objectDate ||
+          object.objectBeginDate ||
+          object.record?.productionDates?.[0]?.date?.text ||
+          "Unknown"}
+      </p>
       {object.objectID && <p>Met Object ID: {object.objectID}</p>}
       {object.systemNumber && <p>V&A System Number: {object.systemNumber}</p>}
 

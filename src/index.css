@@ -58,15 +58,15 @@
 .added-confirmation-message,
 .remove-item-confirmation {
   position: fixed;
-  top: 0;
+  bottom: 0;
   left: 0;
   width: 100%;
   color: #fff;
   padding: 10px;
   text-align: center;
-  font-size: 1.2rem;
+  font-size: 1rem;
   z-index: 99;
-  animation: fadeOut 2s ease-out 1s forwards;
+  animation: fadeOut 1.5s ease-out 1s forwards;
 }
 
 @keyframes fadeOut {
@@ -316,4 +316,13 @@
 
 .modal img {
   width: 100%;
+}
+
+/* loading stuff*/
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 250px;
 }
