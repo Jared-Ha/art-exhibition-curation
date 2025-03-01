@@ -47,12 +47,12 @@ export const addToExhibition = (exhibitionName, object) => {
   const objectId = object.objectID || object.systemNumber || object.id;
 
   if (!objectId) {
-    return "Object has no ID";
+    return { text: "Object has no ID", type: "error" };
   }
 
   const isDuplicate = exhibition.objects.some((obj) => obj.id === objectId);
 
-  let message = "";
+  let result;
   if (!isDuplicate) {
     const objectData = {
       ...object,
@@ -60,12 +60,17 @@ export const addToExhibition = (exhibitionName, object) => {
     };
     exhibition.objects.push(objectData);
     saveExhibitions(exhibitions);
-    message = `Added to your exhibition: "${exhibitionName}"`;
+    result = {
+      text: `Added to your exhibition: "${exhibitionName}"`,
+      type: "success",
+    };
   } else {
-    message = `Object already exists in the exhibition: "${exhibitionName}"`;
+    result = {
+      text: `Object already exists in the exhibition: "${exhibitionName}"`,
+      type: "error",
+    };
   }
-  console.log("addToExhibition returns:", message);
-  return message;
+  return result;
 };
 
 export const deleteExhibition = (exhibitionId) => {

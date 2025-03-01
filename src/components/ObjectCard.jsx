@@ -110,10 +110,8 @@ function ObjectCard({ object, exhibitions, onAddToExhibition }) {
       state: { imageSrc },
     });
   };
-
-  const handleAddToExhibition = () => {
+  const localAddToExhibition = () => {
     if (!newExhibitionName.trim() && !selectedExhibition) return;
-
     const exhibitionName = newExhibitionName.trim() || selectedExhibition;
     if (!exhibitionName) return;
 
@@ -122,14 +120,15 @@ function ObjectCard({ object, exhibitions, onAddToExhibition }) {
       image: imageSrc || placeholderImage,
     };
 
-    const message = onAddToExhibition(exhibitionName, objectData);
-    setAddedConfirmationMessage(message);
+    const result = onAddToExhibition(exhibitionName, objectData);
+    console.log("Result returned to ObjectCard:", result);
+    setAddedConfirmationMessage(result);
 
     setShowModal(false);
     setNewExhibitionName("");
     setSelectedExhibition("");
 
-    setTimeout(() => setAddedConfirmationMessage(""), 3000);
+    setTimeout(() => setAddedConfirmationMessage(null), 3000);
   };
 
   return (
@@ -157,7 +156,11 @@ function ObjectCard({ object, exhibitions, onAddToExhibition }) {
       {object.systemNumber && <p>V&A System Number: {object.systemNumber}</p>}
 
       {addedConfirmationMessage && (
-        <p className="added-confirmation-message">{addedConfirmationMessage}</p>
+        <div
+          className={`added-confirmation-message ${addedConfirmationMessage.type}`}
+        >
+          {addedConfirmationMessage.text}
+        </div>
       )}
 
       <button onClick={() => setShowModal(true)}>Add to Exhibition</button>
@@ -170,7 +173,7 @@ function ObjectCard({ object, exhibitions, onAddToExhibition }) {
         selectedExhibition={selectedExhibition}
         setSelectedExhibition={setSelectedExhibition}
         exhibitions={exhibitions}
-        onSave={handleAddToExhibition}
+        onSave={localAddToExhibition}
       />
     </div>
   );

@@ -35,8 +35,7 @@ function SingleObject() {
   useEffect(() => {
     setExhibitions(getExhibitions());
   }, []);
-
-  const handleAddToExhibition = () => {
+  const localAddToExhibition = () => {
     if (!newExhibitionName.trim() && !selectedExhibition) return;
     const exhibitionName = newExhibitionName.trim() || selectedExhibition;
     if (!exhibitionName) return;
@@ -46,17 +45,15 @@ function SingleObject() {
       image: imageSrc || placeholderImage,
     };
 
-    // Use the helper that prevents duplicates and returns a message.
-    const message = addToExhibition(exhibitionName, objectData);
-    setAddedConfirmationMessage(message);
-
-    setExhibitions(getExhibitions());
+    const result = addToExhibition(exhibitionName, objectData);
+    console.log("Result returned to ObjectCard:", result);
+    setAddedConfirmationMessage(result);
 
     setShowModal(false);
     setNewExhibitionName("");
     setSelectedExhibition("");
 
-    setTimeout(() => setAddedConfirmationMessage(""), 3000);
+    setTimeout(() => setAddedConfirmationMessage(null), 3000);
   };
 
   if (loading) return <p>Loading...</p>;
@@ -125,8 +122,10 @@ function SingleObject() {
       ) : null}
 
       {addedConfirmationMessage && (
-        <div className="added-confirmation-message">
-          {addedConfirmationMessage}
+        <div
+          className={`added-confirmation-message ${addedConfirmationMessage.type}`}
+        >
+          {addedConfirmationMessage.text}
         </div>
       )}
 
@@ -140,7 +139,7 @@ function SingleObject() {
         selectedExhibition={selectedExhibition}
         setSelectedExhibition={setSelectedExhibition}
         exhibitions={exhibitions}
-        onSave={handleAddToExhibition}
+        onSave={localAddToExhibition}
       />
     </div>
   );
