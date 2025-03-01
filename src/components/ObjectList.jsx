@@ -60,7 +60,11 @@ function ObjectList() {
   return (
     <div>
       <h2>Search Results</h2>
-      {loading && searchTerm && <p>{searchTerm} results loading...</p>}
+      {loading && searchTerm && (
+        <p>
+          <strong>"{searchTerm}"</strong> results loading...
+        </p>
+      )}
       {!loading && searchTerm && (
         <>
           <p>
@@ -70,7 +74,7 @@ function ObjectList() {
           <p>Total results: {objects.length}</p>
         </>
       )}
-      {loading && <p>Loading...</p>}
+      {loading && <p></p>}
       {!loading && searchAttempted && objects.length === 0 && (
         <p>No results found</p>
       )}
