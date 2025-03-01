@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { getExhibitions, saveExhibitions } from "../utils/exhibitionStorage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,6 +9,8 @@ function SingleExhibition() {
   const [exhibition, setExhibition] = useState(null);
   const [objectToRemove, setObjectToRemove] = useState(null);
   const [selectedObject, setSelectedObject] = useState(null);
+  const [removalMessage, setRemovalMessage] = useState("");
+  const autoCloseTimerRef = useRef(null);
 
   useEffect(() => {
     const exhibitions = getExhibitions();
@@ -16,8 +18,17 @@ function SingleExhibition() {
     setExhibition(foundExhibition || null);
   }, [id]);
 
+  const clearAutoCloseTimer = () => {
+    if (autoCloseTimerRef.current) {
+      clearTimeout(autoCloseTimerRef.current);
+      autoCloseTimerRef.current = null;
+    }
+  };
+
   const handleRemoveObject = (objectId) => {
     if (!exhibition) return;
+
+    const removedObject = exhibition.objects.find((obj) => obj.id === objectId);
 
     const updatedExhibition = {
       ...exhibition,
@@ -30,7 +41,23 @@ function SingleExhibition() {
 
     saveExhibitions(allExhibitions);
     setExhibition(updatedExhibition);
+
+    setRemovalMessage(
+      `Successfully removed "${removedObject.title}" from "${exhibition.name}"`
+    );
+
+    // close the modal after 3 seconds.
+    autoCloseTimerRef.current = setTimeout(() => {
+      setObjectToRemove(null);
+      setRemovalMessage("");
+      autoCloseTimerRef.current = null;
+    }, 3000);
+  };
+
+  const closeModal = () => {
+    clearAutoCloseTimer();
     setObjectToRemove(null);
+    setRemovalMessage("");
   };
 
   if (!exhibition) return <p>Exhibition not found.</p>;
@@ -55,7 +82,6 @@ function SingleExhibition() {
             </div>
             <h3>{object.title}</h3>
             <p>{object.artistDisplayName || "Unknown Artist"}</p>
-
             <div className="button-group">
               <button onClick={() => setSelectedObject(object)}>View</button>
               <button
@@ -73,25 +99,36 @@ function SingleExhibition() {
       {objectToRemove && (
         <div className="modal-overlay">
           <div className="modal">
-            <h3>Remove Object?</h3>
-            <p>
-              Are you sure you want to remove "{objectToRemove.title}" from "
-              {exhibition.name}"?
-            </p>
-            <div className="modal-actions">
-              <button
-                className="delete-confirm-btn"
-                onClick={() => handleRemoveObject(objectToRemove.id)}
-              >
-                Yes, Remove
-              </button>
-              <button
-                className="cancel-button"
-                onClick={() => setObjectToRemove(null)}
-              >
-                Cancel
-              </button>
-            </div>
+            {removalMessage ? (
+              <div className="confirmation-message">
+                <h3>{removalMessage}</h3>
+                <button className="close-modal" onClick={closeModal}>
+                  ✖
+                </button>
+              </div>
+            ) : (
+              <>
+                <h3>Remove Object?</h3>
+                <p>
+                  Are you sure you want to remove "{objectToRemove.title}" from
+                  "{exhibition.name}"?
+                </p>
+                <div className="modal-actions">
+                  <button
+                    className="delete-confirm-btn"
+                    onClick={() => handleRemoveObject(objectToRemove.id)}
+                  >
+                    Yes, Remove
+                  </button>
+                  <button className="cancel-button" onClick={closeModal}>
+                    Cancel
+                  </button>
+                </div>
+                <button className="close-modal" onClick={closeModal}>
+                  ✖
+                </button>
+              </>
+            )}
           </div>
         </div>
       )}
@@ -112,7 +149,6 @@ function SingleExhibition() {
               alt={selectedObject.title}
               width="250"
             />
-
             <p>
               <strong>Artist:</strong>{" "}
               {selectedObject.artistDisplayName || "Unknown Artist"}
@@ -139,7 +175,6 @@ function SingleExhibition() {
                 selectedObject.briefDescription ||
                 "No description available."}
             </p>
-
             {selectedObject.objectURL && (
               <p>
                 <a
@@ -153,7 +188,6 @@ function SingleExhibition() {
                 </a>
               </p>
             )}
-
             <div className="modal-actions">
               <button
                 className="cancel-button"
