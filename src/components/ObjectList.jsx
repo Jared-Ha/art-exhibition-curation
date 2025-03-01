@@ -49,7 +49,8 @@ function ObjectList() {
   return (
     <div>
       <h2>Search Results</h2>
-      {searchTerm && (
+      {loading && searchTerm && <p>{searchTerm} results loading...</p>}
+      {!loading && searchTerm && (
         <>
           <p>
             Showing results {startResult}-{endResult} for:{" "}

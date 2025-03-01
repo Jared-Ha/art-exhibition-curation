@@ -96,39 +96,39 @@ function SingleExhibition() {
       </div>
 
       {/* Remove Object Modal */}
-      {objectToRemove && (
+      {/* Removal Confirmation Banner */}
+      {removalMessage && (
+        <div className="remove-item-confirmation success">
+          <h3>{removalMessage}</h3>
+          <button className="close-modal" onClick={closeModal}>
+            ✖
+          </button>
+        </div>
+      )}
+
+      {/* Remove Object Modal (only if no removal message is showing) */}
+      {objectToRemove && !removalMessage && (
         <div className="modal-overlay">
           <div className="modal">
-            {removalMessage ? (
-              <div className="confirmation-message">
-                <h3>{removalMessage}</h3>
-                <button className="close-modal" onClick={closeModal}>
-                  ✖
-                </button>
-              </div>
-            ) : (
-              <>
-                <h3>Remove Object?</h3>
-                <p>
-                  Are you sure you want to remove "{objectToRemove.title}" from
-                  "{exhibition.name}"?
-                </p>
-                <div className="modal-actions">
-                  <button
-                    className="delete-confirm-btn"
-                    onClick={() => handleRemoveObject(objectToRemove.id)}
-                  >
-                    Yes, Remove
-                  </button>
-                  <button className="cancel-button" onClick={closeModal}>
-                    Cancel
-                  </button>
-                </div>
-                <button className="close-modal" onClick={closeModal}>
-                  ✖
-                </button>
-              </>
-            )}
+            <h3>Remove Object?</h3>
+            <p>
+              Are you sure you want to remove "{objectToRemove.title}" from "
+              {exhibition.name}"?
+            </p>
+            <div className="modal-actions">
+              <button
+                className="delete-confirm-btn"
+                onClick={() => handleRemoveObject(objectToRemove.id)}
+              >
+                Yes, Remove
+              </button>
+              <button className="cancel-button" onClick={closeModal}>
+                Cancel
+              </button>
+            </div>
+            <button className="close-modal" onClick={closeModal}>
+              ✖
+            </button>
           </div>
         </div>
       )}

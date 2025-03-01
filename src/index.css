@@ -55,12 +55,12 @@
   position: relative;
 }
 
-.added-confirmation-message {
+.added-confirmation-message,
+.remove-item-confirmation {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-
   color: #fff;
   padding: 10px;
   text-align: center;
@@ -78,7 +78,8 @@
   }
 }
 
-.added-confirmation-message.success {
+.added-confirmation-message.success,
+.remove-item-confirmation.success {
   background: #4eb114e7;
   color: #fff;
 }
