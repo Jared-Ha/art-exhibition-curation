@@ -7,18 +7,18 @@ import { getSortDate } from "../utils/getSortDate";
 const RESULTS_PER_PAGE = 10;
 
 export const objectTypes = [
-  { label: "All Types", value: "" },
-  { label: "Painting", value: "painting" },
-  { label: "Sculpture", value: "sculpture" },
-  { label: "Ceramic", value: "ceramic" },
-  { label: "Drawing", value: "drawing" },
-  { label: "Print", value: "print" },
-  { label: "Relief", value: "relief" },
-  { label: "Manuscript", value: "manuscript" },
-  { label: "Mosaic", value: "mosaic" },
-  { label: "Artifact", value: "artifact" },
-  { label: "Antiquities", value: "antiquities" },
-  { label: "Textile", value: "textile" },
+  { label: "All", value: "" },
+  { label: "Paintings", value: "Paintings" },
+  { label: "Sculptures", value: "Sculptures" },
+  { label: "Ceramics", value: "Ceramics" },
+  { label: "Drawings", value: "Drawings" },
+  { label: "Prints", value: "Prints" },
+  { label: "Reliefs", value: "Reliefs" },
+  { label: "Manuscripts", value: "Manuscripts" },
+  { label: "Mosaics", value: "Mosaics" },
+  { label: "Artifacts", value: "Artifacts" },
+  { label: "Antiquities", value: "Antiquities" },
+  { label: "Textiles", value: "Textiles" },
 ];
 
 function ObjectList() {
@@ -42,6 +42,16 @@ function ObjectList() {
   useEffect(() => {
     setExhibitions(getExhibitions());
   }, [objectType]);
+  let headerMessage;
+  if (searchTerm && objectType) {
+    headerMessage = `"${searchTerm}" in ${objectType}`;
+  } else if (searchTerm) {
+    headerMessage = `"${searchTerm}"`;
+  } else if (objectType) {
+    headerMessage = objectType;
+  } else {
+    headerMessage = "all";
+  }
 
   const sortedObjects = [...objects].sort((a, b) => {
     if (sortCriteria === "date") {
@@ -141,7 +151,7 @@ function ObjectList() {
         </select>
       </div>
 
-      {/* Filtering controls*/}
+      {/* Filtering controls */}
       <div className="filter-controls">
         <label htmlFor="objectType">Filter by: </label>
         <select
@@ -169,7 +179,7 @@ function ObjectList() {
         <>
           <p>
             Showing results {startResult}-{endResult} for:{" "}
-            <strong>{searchTerm || objectType || "all"}</strong>
+            <strong>{headerMessage}</strong>
           </p>
           <p>Total results: {objects.length}</p>
         </>
