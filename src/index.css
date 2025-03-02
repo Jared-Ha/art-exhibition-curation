@@ -1,3 +1,7 @@
+* {
+  font-family: "Poppins", sans-serif;
+}
+
 .header {
   display: flex;
   flex-direction: column;
@@ -15,27 +19,45 @@
 }
 
 .nav {
-  width: 100%;
   display: flex;
+  justify-content: center;
+  max-width: 50rem;
+  width: 100%;
+  margin: 0 auto 1rem;
 }
 
 .nav ul {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
   list-style: none;
+  display: flex;
+  gap: 0.25rem;
+  margin: 0;
   padding: 0;
-  gap: 20px;
+  width: 100%;
 }
 
-.nav ul li a {
+.nav li {
+  flex: 1;
+}
+
+.nav a {
+  display: block;
+  text-align: center;
   text-decoration: none;
-  font-weight: bold;
+  color: #333;
+  font-weight: 600;
+  padding: 0.5rem 0;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  border-radius: 5px;
+}
+
+.nav a:hover {
+  background-color: #d7fdfb;
   color: #000;
 }
-.nav ul li a.active {
-  color: #3b5ef8;
+
+.nav a.active {
+  background-color: #6bbbe0;
+  color: #000;
 }
 
 .object-grid,
@@ -296,7 +318,7 @@
   text-align: center;
 }
 
-/* Save Button */
+/* Save and Cancel Button */
 .save-button {
   background: #3b5ef8;
   color: #ffffff;
@@ -306,7 +328,6 @@
   background: #2a4bc6;
 }
 
-/* Cancel Button */
 .cancel-button {
   background: #dddddd;
   color: #333333;
@@ -447,4 +468,8 @@
 
 .order-toggle {
   padding: 0.3rem;
+}
+#yearFrom,
+#yearTo {
+  max-width: 4.5rem;
 }

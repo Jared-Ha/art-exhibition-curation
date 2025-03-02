@@ -47,6 +47,10 @@ function ObjectList() {
   const [yearTo, setYearTo] = useState("");
 
   useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, objectType, yearFrom, yearTo]);
+
+  useEffect(() => {
     setExhibitions(getExhibitions());
   }, [objectType]);
 
