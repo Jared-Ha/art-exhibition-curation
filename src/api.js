@@ -27,7 +27,17 @@ const typeToMetMedium = {
 
 export const getMetObjects = (query, objectType = "", dateBegin, dateEnd) => {
   console.log("in get met obj api call");
-  const baseQuery = query.replace(/\s+/g, "+");
+
+  let effectiveQuery = "";
+  if (!query && objectType) {
+    effectiveQuery = objectType;
+  } else if (query && objectType && typeToMetMedium[objectType] === "") {
+    effectiveQuery = `${query} ${objectType}`;
+  } else {
+    effectiveQuery = query;
+  }
+
+  const baseQuery = effectiveQuery.replace(/\s+/g, "+");
   const encodedQuery = encodeURIComponent(baseQuery);
   const medium = objectType ? typeToMetMedium[objectType] : "";
 
@@ -75,9 +85,8 @@ export const getMetObjects = (query, objectType = "", dateBegin, dateEnd) => {
         const hasOGFallback = obj.objectURL;
         return hasImages || hasOGFallback;
       });
-      // Filter further by checking that any query words are present in the object's text
       const filteredObjects = validObjects.filter((obj) => {
-        const queryWords = query.toLowerCase().split(/\s+/);
+        const queryWords = effectiveQuery.toLowerCase().split(/\s+/);
         const objectText = [
           obj.title,
           obj.medium,
