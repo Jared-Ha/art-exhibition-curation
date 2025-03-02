@@ -6,18 +6,43 @@ import { getSortDate } from "../utils/getSortDate";
 
 const RESULTS_PER_PAGE = 10;
 
+// I think need to whittle these down
+const objectTypes = [
+  { label: "All Types", value: "" },
+  { label: "Painting", value: "painting" },
+  { label: "Sculpture", value: "sculpture" },
+  { label: "Drawing", value: "drawing" },
+  { label: "Print", value: "print" },
+  { label: "Relief", value: "relief" },
+  { label: "Manuscript", value: "manuscript" },
+  { label: "Engraving", value: "engraving" },
+  { label: "Mosaic", value: "mosaic" },
+  { label: "Artifact", value: "artifact" },
+  { label: "Antiquities", value: "antiquities" },
+  { label: "Ceramic", value: "ceramic" },
+  { label: "Bronze", value: "bronze" },
+  { label: "Marble", value: "marble" },
+  { label: "Textile", value: "textile" },
+];
+
 function ObjectList() {
-  const { searchTerm, objects, loading, searchAttempted } = useSearch();
+  const { searchTerm, objects, loading, searchAttempted, performSearch } =
+    useSearch();
   const [exhibitions, setExhibitions] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-
-  // Sorting criteria: only "date" for now
   const [sortCriteria, setSortCriteria] = useState("date");
   const [sortOrder, setSortOrder] = useState("asc");
+  const [selectedObjectType, setSelectedObjectType] = useState("");
+
+  useEffect(() => {
+    if (searchTerm) {
+      performSearch(searchTerm, selectedObjectType);
+    }
+  }, [selectedObjectType]);
 
   useEffect(() => {
     setExhibitions(getExhibitions());
-  }, []);
+  }, [selectedObjectType]);
 
   const sortedObjects = [...objects].sort((a, b) => {
     if (sortCriteria === "date") {
@@ -58,11 +83,10 @@ function ObjectList() {
     return 0;
   });
 
-  // Calculate the items to display on the current page.
+  // Calculate pagination indices.
   const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
   const endIndex = startIndex + RESULTS_PER_PAGE;
   const currentObjects = sortedObjects.slice(startIndex, endIndex);
-
   const totalPages = Math.ceil(objects.length / RESULTS_PER_PAGE);
   const startResult = objects.length > 0 ? startIndex + 1 : 0;
   const endResult = Math.min(currentPage * RESULTS_PER_PAGE, objects.length);
@@ -136,6 +160,25 @@ function ObjectList() {
         >
           <option value="asc">Ascending</option>
           <option value="desc">Descending</option>
+        </select>
+      </div>
+
+      {/* Filtering controls */}
+      <div className="filter-controls">
+        <label htmlFor="objectType">Filter by Object Type: </label>
+        <select
+          id="objectType"
+          value={selectedObjectType}
+          onChange={(e) => {
+            setSelectedObjectType(e.target.value);
+            setCurrentPage(1);
+          }}
+        >
+          {objectTypes.map((type) => (
+            <option key={type.value} value={type.value}>
+              {type.label}
+            </option>
+          ))}
         </select>
       </div>
 

@@ -9,21 +9,23 @@ export function useSearch() {
 
 export function SearchProvider({ children }) {
   const [searchTerm, setSearchTerm] = useState("");
+  const [objectType, setObjectType] = useState("");
   const [objects, setObjects] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchAttempted, setSearchAttempted] = useState(false);
 
-  const performSearch = async (term) => {
-    if (!term || term === searchTerm) return;
+  const performSearch = async (term, type = "") => {
+    if (!term || (term === searchTerm && type === objectType)) return;
 
     setSearchTerm(term);
+    setObjectType(type);
     setLoading(true);
     setSearchAttempted(true);
 
     try {
       const [vaResults, metResults] = await Promise.all([
-        getVAObjects(term),
-        getMetObjects(term),
+        getVAObjects(term, type),
+        getMetObjects(term, type),
       ]);
       setObjects([...vaResults, ...metResults]);
     } catch (error) {
@@ -33,14 +35,20 @@ export function SearchProvider({ children }) {
     }
   };
 
-  // Log objects whenever they change
   useEffect(() => {
     console.log("Search objects:", objects);
   }, [objects]);
 
   return (
     <SearchContext.Provider
-      value={{ searchTerm, objects, loading, searchAttempted, performSearch }}
+      value={{
+        searchTerm,
+        objectType,
+        objects,
+        loading,
+        searchAttempted,
+        performSearch,
+      }}
     >
       {children}
     </SearchContext.Provider>
