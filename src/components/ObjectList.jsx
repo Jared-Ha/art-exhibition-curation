@@ -38,20 +38,14 @@ function ObjectList() {
     loading,
     searchAttempted,
     performSearch,
+    currentPage,
+    setCurrentPage,
   } = useSearch();
   const [exhibitions, setExhibitions] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
   const [sortCriteria, setSortCriteria] = useState("date");
   const [sortOrder, setSortOrder] = useState("desc");
   const [yearFrom, setYearFrom] = useState("");
   const [yearTo, setYearTo] = useState("");
-
-  // useEffect(() => {
-  //   setCurrentPage(1);
-  //   const effectiveYearFrom = yearFrom ? yearFrom : undefined;
-  //   const effectiveYearTo = yearTo ? yearTo : undefined;
-  //   performSearch(searchTerm, objectType, effectiveYearFrom, effectiveYearTo);
-  // }, [searchTerm, objectType, yearFrom, yearTo]);
 
   useEffect(() => {
     setExhibitions(getExhibitions());

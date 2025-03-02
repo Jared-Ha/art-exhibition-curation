@@ -143,7 +143,7 @@ export const getVAObjects = (
     dateParams += `&year_made_to=${yearMadeTo}`;
   }
 
-  const vaUrl = `${vaApi.defaults.baseURL}/objects/search?q=${formattedQuery}&images_exist=true&page_size=70&response_format=json${typeParams}${dateParams}`;
+  const vaUrl = `${vaApi.defaults.baseURL}/objects/search?q=${formattedQuery}&images_exist=true&page_size=100&response_format=json${typeParams}${dateParams}`;
   console.log("Final V&A API URL:", vaUrl);
 
   return vaApi

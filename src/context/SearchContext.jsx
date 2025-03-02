@@ -13,6 +13,7 @@ export function SearchProvider({ children }) {
   const [objects, setObjects] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchAttempted, setSearchAttempted] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const performSearch = (term, type = undefined, dateBegin, dateEnd) => {
     if (!term && type === undefined && dateBegin == null && dateEnd == null)
@@ -55,6 +56,8 @@ export function SearchProvider({ children }) {
         loading,
         searchAttempted,
         performSearch,
+        currentPage,
+        setCurrentPage,
       }}
     >
       {children}
