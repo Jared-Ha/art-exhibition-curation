@@ -14,15 +14,17 @@ function CategoryList() {
 
   return (
     <div className="category-list">
-      {objectTypes.map((cat) => (
-        <div
-          key={cat.value}
-          className="category-card"
-          onClick={() => handleCategoryClick(cat.value)}
-        >
-          <h3>{cat.label}</h3>
-        </div>
-      ))}
+      {objectTypes
+        .filter((cat) => cat.value !== "")
+        .map((cat) => (
+          <div
+            key={cat.value}
+            className="category-card"
+            onClick={() => handleCategoryClick(cat.value)}
+          >
+            <h3>{cat.label}</h3>
+          </div>
+        ))}
     </div>
   );
 }

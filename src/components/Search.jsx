@@ -14,21 +14,23 @@ function Search() {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (!searchInput.trim()) return;
-
     performSearch(searchInput.trim());
     setSearchInput("");
     navigate("/");
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="search-bar">
       <input
         type="text"
         placeholder="Search artworks, sculptures, or antiques..."
         value={searchInput}
         onChange={handleChange}
+        className="search-input"
       />
-      <button type="submit">🔍</button>
+      <button type="submit" className="search-button">
+        🔍
+      </button>
     </form>
   );
 }

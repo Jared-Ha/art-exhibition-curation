@@ -109,7 +109,7 @@ export const getVAObjects = (
   }
 
   let dateParams = "";
-  if (yearMadeFrom !== "" && yearMadeTo !== "") {
+  if (yearMadeFrom && yearMadeTo) {
     dateParams = `&year_made_from=${yearMadeFrom}&year_made_to=${yearMadeTo}`;
   }
 

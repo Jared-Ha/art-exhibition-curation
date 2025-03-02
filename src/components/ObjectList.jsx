@@ -3,11 +3,13 @@ import { useSearch } from "../context/SearchContext";
 import { getExhibitions, addToExhibition } from "../utils/exhibitionStorage";
 import ObjectCard from "./ObjectCard";
 import { getSortDate } from "../utils/getSortDate";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 const RESULTS_PER_PAGE = 10;
 
 export const objectTypes = [
-  { label: "All Types", value: "" },
+  { label: "All", value: "" },
   { label: "Paintings", value: "painting" },
   { label: "Sculptures", value: "sculpture" },
   { label: "Ceramics", value: "ceramic" },
@@ -134,92 +136,100 @@ function ObjectList() {
 
   return (
     <div>
-      {/* Sorting controls */}
-      <div className="sorting-controls">
-        <label htmlFor="sortCriteria">Sort by: </label>
-        <select
-          id="sortCriteria"
-          value={sortCriteria}
-          onChange={(e) => {
-            setSortCriteria(e.target.value);
-            setCurrentPage(1);
-          }}
-        >
-          <option value="date">Date</option>
-          <option value="artist">Artist / Culture</option>
-          <option value="title">Title</option>
-        </select>
+      {/* Container for all controls */}
+      <div className="controls-container">
+        {/* Row that holds sorting and filtering side by side */}
+        <div className="sort-filter-row">
+          {/* Sorting controls */}
+          <div className="sorting-controls">
+            <label htmlFor="sortCriteria">Sort by:</label>
+            <select
+              id="sortCriteria"
+              value={sortCriteria}
+              onChange={(e) => {
+                setSortCriteria(e.target.value);
+                setCurrentPage(1);
+              }}
+            >
+              <option value="date">Date</option>
+              <option value="artist">Artist / Culture</option>
+              <option value="title">Title</option>
+            </select>
 
-        <label htmlFor="sortOrder"> Order: </label>
-        <select
-          id="sortOrder"
-          value={sortOrder}
-          onChange={(e) => {
-            setSortOrder(e.target.value);
-            setCurrentPage(1);
-          }}
-        >
-          <option value="asc">Ascending</option>
-          <option value="desc">Descending</option>
-        </select>
+            <button
+              className="order-toggle"
+              onClick={() => {
+                const newOrder = sortOrder === "asc" ? "desc" : "asc";
+                setSortOrder(newOrder);
+                setCurrentPage(1);
+              }}
+            >
+              {sortOrder === "asc" ? "↑ asc" : "↓ desc"}
+            </button>
+          </div>
+
+          {/* Category filter */}
+          <div className="filter-controls">
+            <label htmlFor="objectType">Category:</label>
+            <select
+              id="objectType"
+              value={objectType}
+              onChange={(e) => {
+                setCurrentPage(1);
+                performSearch(searchTerm, e.target.value, yearFrom, yearTo);
+              }}
+            >
+              {objectTypes.map((type) => (
+                <option key={type.value} value={type.value}>
+                  {type.label}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Date filter */}
+          <div className="filter-controls">
+            <div className="date-field">
+              <label htmlFor="yearFrom">Year from:</label>
+              <input
+                type="number"
+                id="yearFrom"
+                value={yearFrom}
+                onChange={(e) => {
+                  setYearFrom(e.target.value);
+                  setCurrentPage(1);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") applyDateFilter();
+                }}
+              />
+            </div>
+            <div className="date-field">
+              <label htmlFor="yearTo">Year to:</label>
+              <input
+                type="number"
+                id="yearTo"
+                value={yearTo}
+                onChange={(e) => {
+                  setYearTo(e.target.value);
+                  setCurrentPage(1);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") applyDateFilter();
+                }}
+              />
+            </div>
+            <button onClick={applyDateFilter}>Apply Date Filter</button>
+          </div>
+        </div>
       </div>
 
-      {/* Filtering controls for category */}
-      <div className="filter-controls">
-        <label htmlFor="objectType">Filter by Category: </label>
-        <select
-          id="objectType"
-          value={objectType}
-          onChange={(e) => {
-            setCurrentPage(1);
-            performSearch(searchTerm, e.target.value, yearFrom, yearTo);
-          }}
-        >
-          {objectTypes.map((type) => (
-            <option key={type.value} value={type.value}>
-              {type.label}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {/* Filtering controls for date */}
-      <div className="filter-controls">
-        <label htmlFor="yearFrom">Year from: </label>
-        <input
-          type="number"
-          id="yearFrom"
-          value={yearFrom}
-          onChange={(e) => {
-            setYearFrom(e.target.value);
-            setCurrentPage(1);
-          }}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") applyDateFilter();
-          }}
-        />
-        <label htmlFor="yearTo"> Year to: </label>
-        <input
-          type="number"
-          id="yearTo"
-          value={yearTo}
-          onChange={(e) => {
-            setYearTo(e.target.value);
-            setCurrentPage(1);
-          }}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") applyDateFilter();
-          }}
-        />
-        <button onClick={applyDateFilter}>Apply Date Filter</button>
-      </div>
-
-      {loading && (
-        <p>
-          <strong>"{searchTerm}"</strong> results loading...
-        </p>
-      )}
-      {!loading && (
+      {/* Loading / results info */}
+      {loading ? (
+        <div className="loading-spinner">
+          <FontAwesomeIcon icon={faSpinner} spin size="5x" />
+        </div>
+      ) : searchTerm || objectType ? (
         <>
           <p>
             Showing results {startResult}-{endResult} for:{" "}
@@ -227,12 +237,13 @@ function ObjectList() {
           </p>
           <p>Total results: {objects.length}</p>
         </>
-      )}
-      {loading && <p></p>}
+      ) : null}
+
       {!loading && searchAttempted && objects.length === 0 && (
         <p>No results found</p>
       )}
 
+      {/* Render the object cards */}
       <ul className="object-grid">
         {currentObjects.map((obj, index) => (
           <ObjectCard
@@ -244,6 +255,7 @@ function ObjectList() {
         ))}
       </ul>
 
+      {/* Pagination */}
       {objects.length > RESULTS_PER_PAGE && (
         <div className="pagination">
           <button onClick={goToPreviousPage} disabled={currentPage === 1}>

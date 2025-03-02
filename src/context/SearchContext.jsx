@@ -20,6 +20,7 @@ export function SearchProvider({ children }) {
     const effectiveTerm = term;
     setSearchTerm(effectiveTerm);
     setObjectType(type);
+    setObjects([]);
     setLoading(true);
     setSearchAttempted(true);
 
