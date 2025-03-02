@@ -70,8 +70,30 @@ export const getMetObjects = (query, objectType = "", dateBegin, dateEnd) => {
         const hasOGFallback = obj.objectURL;
         return hasImages || hasOGFallback;
       });
-      console.log("MET call post filter", validObjects);
-      return validObjects.filter((obj) => obj !== null);
+      // Filter further by checking that any query words are present in the object's text
+      const filteredObjects = validObjects.filter((obj) => {
+        const queryWords = query.toLowerCase().split(/\s+/);
+        const objectText = [
+          obj.title,
+          obj.medium,
+          obj.department,
+          obj.period,
+          obj.country,
+          obj.region,
+          obj.artistDisplayName,
+          obj.artistAlphaSort,
+          obj.objectName,
+          obj.classification,
+          obj.constituents?.map((c) => c.role).join(" "),
+          obj.tags?.map((tag) => tag.term).join(" "),
+        ]
+          .filter(Boolean)
+          .map((text) => String(text).toLowerCase())
+          .join(" ");
+        return queryWords.some((word) => objectText.includes(word));
+      });
+      console.log("MET call post filter", filteredObjects);
+      return filteredObjects;
     })
     .catch((error) => {
       console.error("Error fetching from The Met:", error);
