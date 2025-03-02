@@ -14,13 +14,12 @@ export function SearchProvider({ children }) {
   const [loading, setLoading] = useState(false);
   const [searchAttempted, setSearchAttempted] = useState(false);
 
-  const performSearch = (term, type = "", dateBegin, dateEnd) => {
-    if (!term && !type && dateBegin == null && dateEnd == null) return;
+  const performSearch = (term, type = undefined, dateBegin, dateEnd) => {
+    if (!term && type === undefined && dateBegin == null && dateEnd == null)
+      return;
 
-    // If type is an empty string, use the existing objectType value from state.
-    // Otherwise, use the passed type.
     const effectiveTerm = term;
-    const effectiveType = type !== "" ? type : objectType;
+    const effectiveType = type === undefined ? objectType : type;
     setSearchTerm(effectiveTerm);
     setObjectType(effectiveType);
     setObjects([]);

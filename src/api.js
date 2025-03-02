@@ -35,8 +35,10 @@ export const getMetObjects = (query, objectType = "", dateBegin, dateEnd) => {
   if (medium) {
     params.medium = medium;
   }
-  if (dateBegin != null && dateEnd != null) {
+  if (dateBegin !== "" && dateBegin) {
     params.dateBegin = dateBegin;
+  }
+  if (dateEnd !== "" && dateEnd) {
     params.dateEnd = dateEnd;
   }
 
@@ -44,8 +46,11 @@ export const getMetObjects = (query, objectType = "", dateBegin, dateEnd) => {
   if (medium) {
     metUrl += `&medium=${encodeURIComponent(medium)}`;
   }
-  if (dateBegin != null && dateEnd != null) {
-    metUrl += `&dateBegin=${dateBegin}&dateEnd=${dateEnd}`;
+  if (dateBegin !== "" && dateBegin) {
+    metUrl += `&dateBegin=${dateBegin}`;
+  }
+  if (dateEnd !== "" && dateEnd) {
+    metUrl += `&dateEnd=${dateEnd}`;
   }
   console.log("Final Met API URL:", metUrl);
 
@@ -131,11 +136,14 @@ export const getVAObjects = (
   }
 
   let dateParams = "";
-  if (yearMadeFrom && yearMadeTo) {
-    dateParams = `&year_made_from=${yearMadeFrom}&year_made_to=${yearMadeTo}`;
+  if (yearMadeFrom !== "" && yearMadeFrom) {
+    dateParams += `&year_made_from=${yearMadeFrom}`;
+  }
+  if (yearMadeTo !== "" && yearMadeTo) {
+    dateParams += `&year_made_to=${yearMadeTo}`;
   }
 
-  const vaUrl = `${vaApi.defaults.baseURL}/objects/search?q=${formattedQuery}&images_exist=true&page_size=65&response_format=json${typeParams}${dateParams}`;
+  const vaUrl = `${vaApi.defaults.baseURL}/objects/search?q=${formattedQuery}&images_exist=true&page_size=70&response_format=json${typeParams}${dateParams}`;
   console.log("Final V&A API URL:", vaUrl);
 
   return vaApi

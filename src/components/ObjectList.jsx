@@ -46,12 +46,12 @@ function ObjectList() {
   const [yearFrom, setYearFrom] = useState("");
   const [yearTo, setYearTo] = useState("");
 
-  useEffect(() => {
-    setCurrentPage(1);
-    const effectiveYearFrom = yearFrom ? yearFrom : undefined;
-    const effectiveYearTo = yearTo ? yearTo : undefined;
-    performSearch(searchTerm, objectType, effectiveYearFrom, effectiveYearTo);
-  }, [searchTerm, objectType, yearFrom, yearTo]);
+  // useEffect(() => {
+  //   setCurrentPage(1);
+  //   const effectiveYearFrom = yearFrom ? yearFrom : undefined;
+  //   const effectiveYearTo = yearTo ? yearTo : undefined;
+  //   performSearch(searchTerm, objectType, effectiveYearFrom, effectiveYearTo);
+  // }, [searchTerm, objectType, yearFrom, yearTo]);
 
   useEffect(() => {
     setExhibitions(getExhibitions());
@@ -135,9 +135,9 @@ function ObjectList() {
   };
 
   const applyDateFilter = () => {
-    const effectiveYearFrom = yearFrom ? yearFrom : -500000;
-    const effectiveYearTo = yearTo ? yearTo : 2100;
-    performSearch(searchTerm, objectType, effectiveYearFrom, effectiveYearTo);
+    // const effectiveYearFrom = yearFrom ? yearFrom : -500000;
+    // const effectiveYearTo = yearTo ? yearTo : 2100;
+    performSearch(searchTerm, objectType, yearFrom, yearTo);
     setCurrentPage(1);
   };
 

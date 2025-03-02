@@ -162,7 +162,9 @@ function ObjectCard({ object, exhibitions, onAddToExhibition }) {
           <div className="overlay">No Image Available</div>
         </div>
       )}
-      <h3>{object.record?.titles?.[0]?.title || object.title || "Untitled"}</h3>
+      <h3 onClick={handleClick} style={{ cursor: "pointer" }}>
+        {object.record?.titles?.[0]?.title || object.title || "Untitled"}
+      </h3>
       <p>{artistOrCulture}</p>
       <p>
         <strong>Date:</strong> {displayDate}
