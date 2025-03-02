@@ -17,16 +17,20 @@ export function SearchProvider({ children }) {
   const performSearch = (term, type = "", dateBegin, dateEnd) => {
     if (!term && !type && dateBegin == null && dateEnd == null) return;
 
+    // If type is an empty string, use the existing objectType value from state.
+    // Otherwise, use the passed type.
     const effectiveTerm = term;
+    const effectiveType = type !== "" ? type : objectType;
     setSearchTerm(effectiveTerm);
-    setObjectType(type);
+    setObjectType(effectiveType);
     setObjects([]);
     setLoading(true);
     setSearchAttempted(true);
+    console.log("here", effectiveTerm, effectiveType, dateBegin, dateEnd);
 
     Promise.all([
-      getVAObjects(effectiveTerm, type, dateBegin, dateEnd),
-      getMetObjects(effectiveTerm, type, dateBegin, dateEnd),
+      getVAObjects(effectiveTerm, effectiveType, dateBegin, dateEnd),
+      getMetObjects(effectiveTerm, effectiveType, dateBegin, dateEnd),
     ])
       .then(([vaResults, metResults]) => {
         setObjects([...vaResults, ...metResults]);

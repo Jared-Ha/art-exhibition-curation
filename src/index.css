@@ -382,15 +382,13 @@
   margin-bottom: 1.5rem;
 }
 
-/* The row that holds sorting controls and filter controls side by side */
 .sort-filter-row {
   display: flex;
-  flex-wrap: wrap; /* wrap onto multiple lines on smaller screens */
+  flex-wrap: wrap;
   gap: 1rem;
   align-items: flex-end;
 }
 
-/* Sorting controls block */
 .sorting-controls {
   display: flex;
   flex-wrap: wrap;
@@ -398,7 +396,6 @@
   align-items: center;
 }
 
-/* Filter controls block */
 .filter-controls {
   display: flex;
   flex-wrap: wrap;
@@ -406,7 +403,6 @@
   align-items: center;
 }
 
-/* Optional styling for selects, inputs, and labels */
 .sorting-controls label,
 .filter-controls label {
   font-weight: 600;
@@ -422,12 +418,11 @@
   font-size: 0.9rem;
 }
 
-/* Style for the date filter button */
 .filter-controls button {
   background-color: #007bff;
   color: #fff;
   border: none;
-  font-size: 0.9rem;
+  font-size: 1rem;
   padding: 0.4rem 0.7rem;
   border-radius: 4px;
   cursor: pointer;
@@ -437,7 +432,6 @@
   background-color: #0056b3;
 }
 
-/* Search bar styles */
 .search-bar {
   display: flex;
   gap: 0.5rem;

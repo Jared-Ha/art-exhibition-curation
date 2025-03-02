@@ -48,6 +48,9 @@ function ObjectList() {
 
   useEffect(() => {
     setCurrentPage(1);
+    const effectiveYearFrom = yearFrom ? yearFrom : undefined;
+    const effectiveYearTo = yearTo ? yearTo : undefined;
+    performSearch(searchTerm, objectType, effectiveYearFrom, effectiveYearTo);
   }, [searchTerm, objectType, yearFrom, yearTo]);
 
   useEffect(() => {
@@ -144,34 +147,6 @@ function ObjectList() {
       <div className="controls-container">
         {/* Row that holds sorting and filtering side by side */}
         <div className="sort-filter-row">
-          {/* Sorting controls */}
-          <div className="sorting-controls">
-            <label htmlFor="sortCriteria">Sort by:</label>
-            <select
-              id="sortCriteria"
-              value={sortCriteria}
-              onChange={(e) => {
-                setSortCriteria(e.target.value);
-                setCurrentPage(1);
-              }}
-            >
-              <option value="date">Date</option>
-              <option value="artist">Artist / Culture</option>
-              <option value="title">Title</option>
-            </select>
-
-            <button
-              className="order-toggle"
-              onClick={() => {
-                const newOrder = sortOrder === "asc" ? "desc" : "asc";
-                setSortOrder(newOrder);
-                setCurrentPage(1);
-              }}
-            >
-              {sortOrder === "asc" ? "↑ asc" : "↓ desc"}
-            </button>
-          </div>
-
           {/* Category filter */}
           <div className="filter-controls">
             <label htmlFor="objectType">Category:</label>
@@ -209,7 +184,7 @@ function ObjectList() {
               />
             </div>
             <div className="date-field">
-              <label htmlFor="yearTo">Year to:</label>
+              <label htmlFor="yearTo">To:</label>
               <input
                 type="number"
                 id="yearTo"
@@ -223,7 +198,34 @@ function ObjectList() {
                 }}
               />
             </div>
-            <button onClick={applyDateFilter}>Apply Date Filter</button>
+            <button onClick={applyDateFilter}>Apply</button>
+          </div>
+          {/* Sorting controls */}
+          <div className="sorting-controls">
+            <label htmlFor="sortCriteria">Sort by:</label>
+            <select
+              id="sortCriteria"
+              value={sortCriteria}
+              onChange={(e) => {
+                setSortCriteria(e.target.value);
+                setCurrentPage(1);
+              }}
+            >
+              <option value="date">Date</option>
+              <option value="artist">Artist / Culture</option>
+              <option value="title">Title</option>
+            </select>
+
+            <button
+              className="order-toggle"
+              onClick={() => {
+                const newOrder = sortOrder === "asc" ? "desc" : "asc";
+                setSortOrder(newOrder);
+                setCurrentPage(1);
+              }}
+            >
+              {sortOrder === "asc" ? "↑ asc" : "↓ desc"}
+            </button>
           </div>
         </div>
       </div>
