@@ -330,3 +330,19 @@
   align-items: center;
   height: 250px;
 }
+
+/**/
+.category-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem; /* adds space between cards */
+}
+
+.category-card {
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 1rem;
+  text-align: center;
+}

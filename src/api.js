@@ -49,7 +49,7 @@ export const getMetObjects = (query, objectType = "") => {
       if (!searchResponse.data.objectIDs) return [];
       console.log("MET searchResponse:", searchResponse.data);
       const objectRequests = searchResponse.data.objectIDs
-        .slice(0, 25)
+        .slice(0, 8)
         .map((id) =>
           metApi
             .get(`/objects/${id}`)
@@ -104,7 +104,7 @@ export const getMetObjects = (query, objectType = "") => {
       //   });
       // });
       console.log("MET call post filter", validObjects);
-      return validObjects.filter((obj) => obj !== null).slice(0, 20);
+      return validObjects.filter((obj) => obj !== null).slice(0, 8);
     })
     .catch((error) => {
       console.error("Error fetching from The Met:", error);
@@ -139,7 +139,7 @@ export const getVAObjects = (query, objectType = "") => {
       &kw_object_type=jewellery`.replace(/\s+/g, "");
   }
 
-  const vaUrl = `${vaApi.defaults.baseURL}/objects/search?q=${formattedQuery}&images_exist=true&page_size=40&response_format=json${typeParams}`;
+  const vaUrl = `${vaApi.defaults.baseURL}/objects/search?q=${formattedQuery}&images_exist=true&page_size=4&response_format=json${typeParams}`;
   console.log("Final V&A API URL:", vaUrl);
 
   return vaApi
