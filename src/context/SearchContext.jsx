@@ -14,19 +14,18 @@ export function SearchProvider({ children }) {
   const [loading, setLoading] = useState(false);
   const [searchAttempted, setSearchAttempted] = useState(false);
 
-  const performSearch = (term, type = "") => {
-    if (!term && !type) return;
+  const performSearch = (term, type = "", dateBegin, dateEnd) => {
+    if (!term && !type && dateBegin == null && dateEnd == null) return;
 
     const effectiveTerm = term;
-
     setSearchTerm(effectiveTerm);
     setObjectType(type);
     setLoading(true);
     setSearchAttempted(true);
 
     Promise.all([
-      getVAObjects(effectiveTerm, type),
-      getMetObjects(effectiveTerm, type),
+      getVAObjects(effectiveTerm, type, dateBegin, dateEnd),
+      getMetObjects(effectiveTerm, type, dateBegin, dateEnd),
     ])
       .then(([vaResults, metResults]) => {
         setObjects([...vaResults, ...metResults]);

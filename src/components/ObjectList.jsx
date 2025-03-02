@@ -41,7 +41,11 @@ function ObjectList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [sortCriteria, setSortCriteria] = useState("date");
   const [sortOrder, setSortOrder] = useState("desc");
+  // Local state for date filtering; these will update on keystroke.
+  const [yearFrom, setYearFrom] = useState("");
+  const [yearTo, setYearTo] = useState("");
 
+  // Trigger search when searchTerm or objectType changes (but not date fields).
   useEffect(() => {
     performSearch(searchTerm, objectType);
   }, [objectType, searchTerm]);
@@ -49,6 +53,7 @@ function ObjectList() {
   useEffect(() => {
     setExhibitions(getExhibitions());
   }, [objectType]);
+
   let headerMessage;
   if (searchTerm && objectType) {
     headerMessage = `"${searchTerm}" in ${formatObjectType(objectType)}`;
@@ -158,14 +163,14 @@ function ObjectList() {
         </select>
       </div>
 
-      {/* Filtering controls */}
+      {/* Filtering controls for category */}
       <div className="filter-controls">
-        <label htmlFor="objectType">Filter by: </label>
+        <label htmlFor="objectType">Filter by Category: </label>
         <select
           id="objectType"
           value={objectType}
           onChange={(e) => {
-            performSearch(searchTerm, e.target.value);
+            performSearch(searchTerm, e.target.value, yearFrom, yearTo);
             setCurrentPage(1);
           }}
         >
@@ -175,6 +180,37 @@ function ObjectList() {
             </option>
           ))}
         </select>
+      </div>
+
+      {/* Filtering controls for date */}
+      <div className="filter-controls">
+        <label htmlFor="yearFrom">Year from: </label>
+        <input
+          type="number"
+          id="yearFrom"
+          value={yearFrom}
+          onChange={(e) => {
+            setYearFrom(e.target.value);
+            setCurrentPage(1);
+          }}
+        />
+        <label htmlFor="yearTo"> Year to: </label>
+        <input
+          type="number"
+          id="yearTo"
+          value={yearTo}
+          onChange={(e) => {
+            setYearTo(e.target.value);
+            setCurrentPage(1);
+          }}
+        />
+        <button
+          onClick={() => {
+            performSearch(searchTerm, objectType, yearFrom, yearTo);
+          }}
+        >
+          Apply Date Filter
+        </button>
       </div>
 
       {loading && (
