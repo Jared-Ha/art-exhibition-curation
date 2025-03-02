@@ -41,7 +41,6 @@ function constructVAHighResImage(baseUrl) {
 }
 
 function ObjectCard({ object, exhibitions, onAddToExhibition }) {
-  console.log(object);
   const navigate = useNavigate();
   const [imageSrc, setImageSrc] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -108,7 +107,7 @@ function ObjectCard({ object, exhibitions, onAddToExhibition }) {
   }, [object]);
 
   const handleClick = () => {
-    navigate(`/object/${object.objectID || object.systemNumber}`, {
+    navigate(`/object/${object.objectID || object.record?.systemNumber}`, {
       state: { object, imageSrc },
     });
   };

@@ -12,7 +12,6 @@ function getObjectId(object) {
 
 function SingleObject() {
   const { id } = useParams();
-  console.log(id);
   const location = useLocation();
   const navigate = useNavigate();
   const { objects: contextObjects } = useSearch();
@@ -44,7 +43,6 @@ function SingleObject() {
     setLoading(true);
     fetchFn(id)
       .then((data) => {
-        console.log("Fetched detailed object data:", data);
         setObject(data || null);
         if (isVAObject) {
           const vaHighResImage = data?.meta?.images?._iiif_image
@@ -77,9 +75,10 @@ function SingleObject() {
     const exhibitionName = newExhibitionName.trim() || selectedExhibition;
     if (!exhibitionName) return;
 
-    const objectData = id.startsWith("O")
-      ? { ...object.record, image: imageSrc || placeholderImage }
-      : { ...object, image: imageSrc || placeholderImage };
+    const objectData = {
+      ...object,
+      image: imageSrc || placeholderImage,
+    };
 
     const result = addToExhibition(exhibitionName, objectData);
     setAddedConfirmationMessage(result);

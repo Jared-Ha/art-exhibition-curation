@@ -44,7 +44,7 @@ export const addToExhibition = (exhibitionName, object) => {
     exhibitions.push(exhibition);
   }
 
-  const objectId = object.objectID || object.systemNumber || object.id;
+  const objectId = object.objectID || object.record?.systemNumber || object.id;
 
   if (!objectId) {
     return { text: "Object has no ID", type: "error" };
