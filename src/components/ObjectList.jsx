@@ -6,40 +6,42 @@ import { getSortDate } from "../utils/getSortDate";
 
 const RESULTS_PER_PAGE = 10;
 
-const objectTypes = [
+export const objectTypes = [
   { label: "All Types", value: "" },
   { label: "Painting", value: "painting" },
   { label: "Sculpture", value: "sculpture" },
   { label: "Ceramic", value: "ceramic" },
   { label: "Drawing", value: "drawing" },
-  { label: "Engraving", value: "engraving" },
   { label: "Print", value: "print" },
   { label: "Relief", value: "relief" },
   { label: "Manuscript", value: "manuscript" },
   { label: "Mosaic", value: "mosaic" },
   { label: "Artifact", value: "artifact" },
   { label: "Antiquities", value: "antiquities" },
-  { label: "Bronze", value: "bronze" },
-  { label: "Marble", value: "marble" },
   { label: "Textile", value: "textile" },
 ];
 
 function ObjectList() {
-  const { searchTerm, objects, loading, searchAttempted, performSearch } =
-    useSearch();
+  const {
+    searchTerm,
+    objectType,
+    objects,
+    loading,
+    searchAttempted,
+    performSearch,
+  } = useSearch();
   const [exhibitions, setExhibitions] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortCriteria, setSortCriteria] = useState("date");
   const [sortOrder, setSortOrder] = useState("desc");
-  const [selectedObjectType, setSelectedObjectType] = useState("");
 
   useEffect(() => {
-    performSearch(searchTerm, selectedObjectType);
-  }, [selectedObjectType]);
+    performSearch(searchTerm, objectType);
+  }, [objectType, searchTerm]);
 
   useEffect(() => {
     setExhibitions(getExhibitions());
-  }, [selectedObjectType]);
+  }, [objectType]);
 
   const sortedObjects = [...objects].sort((a, b) => {
     if (sortCriteria === "date") {
@@ -139,14 +141,14 @@ function ObjectList() {
         </select>
       </div>
 
-      {/* Filtering controls */}
+      {/* Filtering controls*/}
       <div className="filter-controls">
         <label htmlFor="objectType">Filter by: </label>
         <select
           id="objectType"
-          value={selectedObjectType}
+          value={objectType}
           onChange={(e) => {
-            setSelectedObjectType(e.target.value);
+            performSearch(searchTerm, e.target.value);
             setCurrentPage(1);
           }}
         >
@@ -167,7 +169,7 @@ function ObjectList() {
         <>
           <p>
             Showing results {startResult}-{endResult} for:{" "}
-            <strong>{searchTerm || selectedObjectType || "all"}</strong>
+            <strong>{searchTerm || objectType || "all"}</strong>
           </p>
           <p>Total results: {objects.length}</p>
         </>

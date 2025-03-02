@@ -16,14 +16,18 @@ export function SearchProvider({ children }) {
 
   const performSearch = (term, type = "") => {
     if (!term && !type) return;
-    if (term === searchTerm && type === objectType) return;
 
-    setSearchTerm(term);
+    const effectiveTerm = term;
+
+    setSearchTerm(effectiveTerm);
     setObjectType(type);
     setLoading(true);
     setSearchAttempted(true);
 
-    Promise.all([getVAObjects(term, type), getMetObjects(term, type)])
+    Promise.all([
+      getVAObjects(effectiveTerm, type),
+      getMetObjects(effectiveTerm, type),
+    ])
       .then(([vaResults, metResults]) => {
         setObjects([...vaResults, ...metResults]);
       })
