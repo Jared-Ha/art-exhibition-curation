@@ -49,7 +49,7 @@ export const getMetObjects = (query, objectType = "") => {
       if (!searchResponse.data.objectIDs) return [];
       console.log("MET searchResponse:", searchResponse.data);
       const objectRequests = searchResponse.data.objectIDs
-        .slice(0, 50)
+        .slice(0, 25)
         .map((id) =>
           metApi
             .get(`/objects/${id}`)

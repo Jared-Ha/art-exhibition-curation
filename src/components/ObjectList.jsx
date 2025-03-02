@@ -113,25 +113,7 @@ function ObjectList() {
 
   return (
     <div>
-      <h2>Search Results</h2>
-      {loading && searchTerm && (
-        <p>
-          <strong>"{searchTerm}"</strong> results loading...
-        </p>
-      )}
-      {!loading && searchTerm && (
-        <>
-          <p>
-            Showing results {startResult}-{endResult} for:{" "}
-            <strong>{searchTerm}</strong>
-          </p>
-          <p>Total results: {objects.length}</p>
-        </>
-      )}
-      {loading && <p></p>}
-      {!loading && searchAttempted && objects.length === 0 && (
-        <p>No results found</p>
-      )}
+      {/* <h2>Search Results</h2> */}
 
       {/* Sorting controls */}
       <div className="sorting-controls">
@@ -165,7 +147,7 @@ function ObjectList() {
 
       {/* Filtering controls */}
       <div className="filter-controls">
-        <label htmlFor="objectType">Filter by Object Type: </label>
+        <label htmlFor="objectType">Filter by: </label>
         <select
           id="objectType"
           value={selectedObjectType}
@@ -181,6 +163,24 @@ function ObjectList() {
           ))}
         </select>
       </div>
+      {loading && searchTerm && (
+        <p>
+          <strong>"{searchTerm}"</strong> results loading...
+        </p>
+      )}
+      {!loading && searchTerm && (
+        <>
+          <p>
+            Showing results {startResult}-{endResult} for:{" "}
+            <strong>{searchTerm}</strong>
+          </p>
+          <p>Total results: {objects.length}</p>
+        </>
+      )}
+      {loading && <p></p>}
+      {!loading && searchAttempted && objects.length === 0 && (
+        <p>No results found</p>
+      )}
 
       <ul className="object-grid">
         {currentObjects.map((obj, index) => (
