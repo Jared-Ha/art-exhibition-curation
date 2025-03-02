@@ -7,19 +7,26 @@ import { getSortDate } from "../utils/getSortDate";
 const RESULTS_PER_PAGE = 10;
 
 export const objectTypes = [
-  { label: "All", value: "" },
-  { label: "Paintings", value: "Paintings" },
-  { label: "Sculptures", value: "Sculptures" },
-  { label: "Ceramics", value: "Ceramics" },
-  { label: "Drawings", value: "Drawings" },
-  { label: "Prints", value: "Prints" },
-  { label: "Reliefs", value: "Reliefs" },
-  { label: "Manuscripts", value: "Manuscripts" },
-  { label: "Mosaics", value: "Mosaics" },
-  { label: "Artifacts", value: "Artifacts" },
-  { label: "Antiquities", value: "Antiquities" },
-  { label: "Textiles", value: "Textiles" },
+  { label: "All Types", value: "" },
+  { label: "Paintings", value: "painting" },
+  { label: "Sculptures", value: "sculpture" },
+  { label: "Ceramics", value: "ceramic" },
+  { label: "Drawings", value: "drawing" },
+  { label: "Prints", value: "print" },
+  { label: "Reliefs", value: "relief" },
+  { label: "Manuscripts", value: "manuscript" },
+  { label: "Mosaics", value: "mosaic" },
+  { label: "Artifacts", value: "artifact" },
+  { label: "Antiquities", value: "antiquities" },
+  { label: "Textiles", value: "textile" },
 ];
+
+const formatObjectType = (type) => {
+  if (!type) return "";
+  let formatted = type.charAt(0).toUpperCase() + type.slice(1);
+  if (!formatted.endsWith("s")) formatted += "s";
+  return formatted;
+};
 
 function ObjectList() {
   const {
@@ -44,11 +51,11 @@ function ObjectList() {
   }, [objectType]);
   let headerMessage;
   if (searchTerm && objectType) {
-    headerMessage = `"${searchTerm}" in ${objectType}`;
+    headerMessage = `"${searchTerm}" in ${formatObjectType(objectType)}`;
   } else if (searchTerm) {
     headerMessage = `"${searchTerm}"`;
   } else if (objectType) {
-    headerMessage = objectType;
+    headerMessage = formatObjectType(objectType);
   } else {
     headerMessage = "all";
   }
