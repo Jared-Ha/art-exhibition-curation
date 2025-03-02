@@ -45,11 +45,6 @@ function ObjectList() {
   const [yearFrom, setYearFrom] = useState("");
   const [yearTo, setYearTo] = useState("");
 
-  // Trigger search when searchTerm or objectType changes (but not date fields).
-  useEffect(() => {
-    performSearch(searchTerm, objectType);
-  }, [objectType, searchTerm]);
-
   useEffect(() => {
     setExhibitions(getExhibitions());
   }, [objectType]);
@@ -170,8 +165,8 @@ function ObjectList() {
           id="objectType"
           value={objectType}
           onChange={(e) => {
-            performSearch(searchTerm, e.target.value, yearFrom, yearTo);
             setCurrentPage(1);
+            performSearch(searchTerm, e.target.value);
           }}
         >
           {objectTypes.map((type) => (

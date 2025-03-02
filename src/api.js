@@ -26,6 +26,7 @@ const typeToMetMedium = {
 };
 
 export const getMetObjects = (query, objectType = "", dateBegin, dateEnd) => {
+  console.log("in get met obj api call");
   const baseQuery = query.replace(/\s+/g, "+");
   const encodedQuery = encodeURIComponent(baseQuery);
   const medium = objectType ? typeToMetMedium[objectType] : "";
@@ -54,7 +55,7 @@ export const getMetObjects = (query, objectType = "", dateBegin, dateEnd) => {
       if (!searchResponse.data.objectIDs) return [];
       console.log("MET searchResponse:", searchResponse.data);
       const objectRequests = searchResponse.data.objectIDs
-        .slice(0, 50)
+        .slice(0, 5)
         .map((id) => getMetObjectById(id));
       return Promise.all(objectRequests);
     })
@@ -113,7 +114,7 @@ export const getVAObjects = (
     dateParams = `&year_made_from=${yearMadeFrom}&year_made_to=${yearMadeTo}`;
   }
 
-  const vaUrl = `${vaApi.defaults.baseURL}/objects/search?q=${formattedQuery}&images_exist=true&page_size=4&response_format=json${typeParams}${dateParams}`;
+  const vaUrl = `${vaApi.defaults.baseURL}/objects/search?q=${formattedQuery}&images_exist=true&page_size=5&response_format=json${typeParams}${dateParams}`;
   console.log("Final V&A API URL:", vaUrl);
 
   return vaApi
