@@ -28,8 +28,6 @@ export function SearchProvider({ children }) {
     setSearchAttempted(true);
     setCurrentPage(1);
 
-    // console.log("here", effectiveTerm, effectiveType, dateBegin, dateEnd);
-
     Promise.all([
       getVAObjects(effectiveTerm, effectiveType, dateBegin, dateEnd),
       getMetObjects(effectiveTerm, effectiveType, dateBegin, dateEnd),

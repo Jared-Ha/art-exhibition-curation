@@ -26,8 +26,6 @@ const typeToMetMedium = {
 };
 
 export const getMetObjects = (query, objectType = "", dateBegin, dateEnd) => {
-  console.log("in get met obj api call");
-
   let effectiveQuery = "";
   if (!query && objectType) {
     effectiveQuery = objectType;
@@ -62,20 +60,17 @@ export const getMetObjects = (query, objectType = "", dateBegin, dateEnd) => {
   if (dateEnd !== "" && dateEnd) {
     metUrl += `&dateEnd=${dateEnd}`;
   }
-  console.log("Final Met API URL:", metUrl);
 
   return metApi
     .get("/search", { params })
     .then((searchResponse) => {
       if (!searchResponse.data.objectIDs) return [];
-      console.log("MET searchResponse:", searchResponse.data);
       const objectRequests = searchResponse.data.objectIDs
         .slice(0, 50)
         .map((id) => getMetObjectById(id));
       return Promise.all(objectRequests);
     })
     .then((responses) => {
-      console.log("MET call pre filter", responses);
       const validObjects = responses.filter((obj) => {
         if (!obj) return false;
         const hasImages =
@@ -106,7 +101,6 @@ export const getMetObjects = (query, objectType = "", dateBegin, dateEnd) => {
           .join(" ");
         return queryWords.some((word) => objectText.includes(word));
       });
-      console.log("MET call post filter", filteredObjects);
       return filteredObjects;
     })
     .catch((error) => {
@@ -153,22 +147,18 @@ export const getVAObjects = (
   }
 
   const vaUrl = `${vaApi.defaults.baseURL}/objects/search?q=${formattedQuery}&images_exist=true&page_size=100&response_format=json${typeParams}${dateParams}`;
-  console.log("Final V&A API URL:", vaUrl);
 
   return vaApi
     .get(vaUrl)
     .then((response) => {
       const summaryRecords = response.data.records || [];
-      console.log("V&A summary records:", summaryRecords);
       const fullObjectRequests = summaryRecords.map((record) =>
         getVAObjectById(record.systemNumber).catch(() => null)
       );
       return Promise.all(fullObjectRequests);
     })
     .then((fullObjects) => {
-      console.log("fullObjects", fullObjects);
       const validObjects = fullObjects.filter((obj) => obj !== null);
-      console.log("Full V&A objects:", validObjects);
       return validObjects;
     })
     .catch((error) => {
@@ -191,7 +181,6 @@ export const getMetObjectById = (id) => {
   return metApi
     .get(`/objects/${id}`)
     .then((res) => {
-      // console.log(`Fetched MET object ${id}:`, res.data);
       return res.data;
     })
     .catch((error) => {

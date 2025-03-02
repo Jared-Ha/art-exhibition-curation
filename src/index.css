@@ -77,6 +77,10 @@
   position: relative;
 }
 
+.objectcard-button-container button {
+  margin: 0rem 0.5rem;
+}
+
 .added-confirmation-message,
 .remove-item-confirmation {
   position: fixed;

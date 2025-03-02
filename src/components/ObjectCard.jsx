@@ -169,10 +169,7 @@ function ObjectCard({ object, exhibitions, onAddToExhibition }) {
       <p>
         <strong>Date:</strong> {displayDate}
       </p>
-      {object.objectID && <p>Met Object ID: {object.objectID}</p>}
-      {object.record?.systemNumber && (
-        <p>V&A System Number: {object.record.systemNumber}</p>
-      )}
+
       {addedConfirmationMessage && (
         <div
           className={`added-confirmation-message ${addedConfirmationMessage.type}`}
@@ -180,8 +177,13 @@ function ObjectCard({ object, exhibitions, onAddToExhibition }) {
           {addedConfirmationMessage.text}
         </div>
       )}
+      <div className="objectcard-button-container">
+        <button onClick={handleClick} style={{ cursor: "pointer" }}>
+          View details
+        </button>
 
-      <button onClick={() => setShowModal(true)}>Add to Exhibition</button>
+        <button onClick={() => setShowModal(true)}>Add to Exhibition</button>
+      </div>
 
       <AddToExhibitionModal
         show={showModal}
