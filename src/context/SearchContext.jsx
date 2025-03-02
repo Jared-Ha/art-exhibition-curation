@@ -26,7 +26,9 @@ export function SearchProvider({ children }) {
     setObjects([]);
     setLoading(true);
     setSearchAttempted(true);
-    console.log("here", effectiveTerm, effectiveType, dateBegin, dateEnd);
+    setCurrentPage(1);
+
+    // console.log("here", effectiveTerm, effectiveType, dateBegin, dateEnd);
 
     Promise.all([
       getVAObjects(effectiveTerm, effectiveType, dateBegin, dateEnd),
