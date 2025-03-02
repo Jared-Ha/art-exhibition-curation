@@ -166,7 +166,6 @@ function ObjectCard({ object, exhibitions, onAddToExhibition }) {
         {object.record?.titles?.[0]?.title || object.title || "Untitled"}
       </h3>
       <p>{artistOrCulture}</p>
-      <p>object type: {object.record?.objectType}</p>
       <p>
         <strong>Date:</strong> {displayDate}
       </p>

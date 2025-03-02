@@ -18,8 +18,6 @@ export const objectTypes = [
   { label: "Reliefs", value: "relief" },
   { label: "Manuscripts", value: "manuscript" },
   { label: "Mosaics", value: "mosaic" },
-  { label: "Artifacts", value: "artifact" },
-  { label: "Antiquities", value: "antiquities" },
   { label: "Textiles", value: "textile" },
 ];
 
