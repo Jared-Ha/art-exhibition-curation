@@ -24,6 +24,36 @@ function ObjectList() {
       const dateA = getSortDate(a);
       const dateB = getSortDate(b);
       return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
+    } else if (sortCriteria === "artist") {
+      const artistA = (
+        a.artistDisplayName ||
+        a.record?.artistMakerPerson?.[0].name?.text ||
+        a.culture ||
+        "Unknown"
+      ).toLowerCase();
+      const artistB = (
+        b.artistDisplayName ||
+        b.record?.artistMakerPerson?.[0].name?.text ||
+        b.culture ||
+        "Unknown"
+      ).toLowerCase();
+      return sortOrder === "asc"
+        ? artistA.localeCompare(artistB)
+        : artistB.localeCompare(artistA);
+    } else if (sortCriteria === "title") {
+      const titleA = (
+        a.record?.titles?.[0]?.title ||
+        a.title ||
+        "Untitled"
+      ).toLowerCase();
+      const titleB = (
+        b.record?.titles?.[0]?.title ||
+        b.title ||
+        "Untitled"
+      ).toLowerCase();
+      return sortOrder === "asc"
+        ? titleA.localeCompare(titleB)
+        : titleB.localeCompare(titleA);
     }
     return 0;
   });
@@ -91,8 +121,10 @@ function ObjectList() {
           }}
         >
           <option value="date">Date</option>
-          {/* Future criteria can be added here */}
+          <option value="artist">Artist / Culture</option>
+          <option value="title">Title</option>
         </select>
+
         <label htmlFor="sortOrder"> Order: </label>
         <select
           id="sortOrder"
