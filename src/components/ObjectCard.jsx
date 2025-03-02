@@ -40,6 +40,7 @@ function constructVAHighResImage(baseUrl) {
 }
 
 function ObjectCard({ object, exhibitions, onAddToExhibition }) {
+  console.log(object);
   const navigate = useNavigate();
   const [imageSrc, setImageSrc] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -49,18 +50,18 @@ function ObjectCard({ object, exhibitions, onAddToExhibition }) {
   const [addedConfirmationMessage, setAddedConfirmationMessage] = useState("");
 
   const vaHighResImage = constructVAHighResImage(
-    object._images?._iiif_image_base_url
+    object.meta?.images?._iiif_image
   );
 
   const primaryImage =
     object.primaryImage ||
     object.primaryImageSmall ||
     vaHighResImage ||
-    object._images?._primary_thumbnail;
+    object.meta?.images?._primary_thumbnail;
 
   const artistOrCulture =
     object.artistDisplayName ||
-    object._primaryMaker?.name ||
+    object.record?.artistMakerPerson?.[0].name?.text ||
     object.culture ||
     "Unknown";
 
@@ -152,18 +153,19 @@ function ObjectCard({ object, exhibitions, onAddToExhibition }) {
           <div className="overlay">No Image Available</div>
         </div>
       )}
-      <h3>{object._primaryTitle || object.title}</h3>
+      <h3>{object.record?.titles?.[0]?.title || object.title || "Untitled"}</h3>
       <p>{artistOrCulture}</p>
       <p>
         <strong>Date:</strong>{" "}
         {object.objectDate ||
           object.objectBeginDate ||
-          object.record?.productionDates?.[0]?.date?.text ||
+          object.record?.productionDates?.[0]?.date?.earliest ||
           "Unknown"}
       </p>
       {object.objectID && <p>Met Object ID: {object.objectID}</p>}
-      {object.systemNumber && <p>V&A System Number: {object.systemNumber}</p>}
-
+      {object.record?.systemNumber && (
+        <p>V&A System Number: {object.record.systemNumber}</p>
+      )}
       {addedConfirmationMessage && (
         <div
           className={`added-confirmation-message ${addedConfirmationMessage.type}`}
@@ -171,9 +173,7 @@ function ObjectCard({ object, exhibitions, onAddToExhibition }) {
           {addedConfirmationMessage.text}
         </div>
       )}
-
       <button onClick={() => setShowModal(true)}>Add to Exhibition</button>
-
       <AddToExhibitionModal
         show={showModal}
         onClose={() => setShowModal(false)}

@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import { getVAObjects, getMetObjects } from "../api";
 
 const SearchContext = createContext();
@@ -32,6 +32,11 @@ export function SearchProvider({ children }) {
       setLoading(false);
     }
   };
+
+  // Log objects whenever they change
+  useEffect(() => {
+    console.log("Search objects:", objects);
+  }, [objects]);
 
   return (
     <SearchContext.Provider

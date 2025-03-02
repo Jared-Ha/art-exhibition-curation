@@ -11,28 +11,42 @@ const metApi = axios.create({
 export const getVAObjects = (query) => {
   const formattedQuery = query.replace(/\s+/g, "+");
 
+  // Build the V&A search URL. This returns summary records.
   const vaUrl =
-    `${vaApi.defaults.baseURL}/objects/search?q=${formattedQuery}&images_exist=true&page_size=10&response_format=json
-      &kw_object_type=painting
-      &kw_object_type=sculpture
-      &kw_object_type=drawing
-      &kw_object_type=print
-      &kw_object_type=relief
-      &kw_object_type=manuscript
-      &kw_object_type=engraving
-      &kw_object_type=mosaic
-      &kw_object_type=artifact
-      &kw_object_type=antiquities
-      &kw_object_type=ceramic
-      &kw_object_type=bronze
-      &kw_object_type=marble
-      &kw_object_type=textile`.replace(/\s+/g, "");
+    `${vaApi.defaults.baseURL}/objects/search?q=${formattedQuery}&images_exist=true&page_size=5&response_format=json
+    &kw_object_type=painting
+    &kw_object_type=sculpture
+    &kw_object_type=drawing
+    &kw_object_type=print
+    &kw_object_type=relief
+    &kw_object_type=manuscript
+    &kw_object_type=engraving
+    &kw_object_type=mosaic
+    &kw_object_type=artifact
+    &kw_object_type=antiquities
+    &kw_object_type=ceramic
+    &kw_object_type=bronze
+    &kw_object_type=marble
+    &kw_object_type=textile`.replace(/\s+/g, "");
 
   console.log("Final V&A API URL:", vaUrl);
 
   return vaApi
     .get(vaUrl)
-    .then((response) => response.data.records || [])
+    .then((response) => {
+      const summaryRecords = response.data.records || [];
+      console.log("V&A summary records:", summaryRecords);
+      // For each summary record, use its systemNumber to fetch full details.
+      const fullObjectRequests = summaryRecords.map((record) =>
+        getVAObjectById(record.systemNumber).catch(() => null)
+      );
+      return Promise.all(fullObjectRequests);
+    })
+    .then((fullObjects) => {
+      const validObjects = fullObjects.filter((obj) => obj !== null);
+      console.log("Full V&A objects:", validObjects);
+      return validObjects;
+    })
     .catch((error) => {
       console.error("Error fetching from V&A:", error);
       return [];
@@ -51,7 +65,7 @@ export const getMetObjects = (query) => {
       if (!searchResponse.data.objectIDs) return [];
 
       const objectRequests = searchResponse.data.objectIDs
-        .slice(0, 20)
+        .slice(0, 15)
         .map((id) =>
           metApi
             .get(`/objects/${id}`)
