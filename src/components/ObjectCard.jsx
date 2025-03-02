@@ -4,6 +4,7 @@ import placeholderImage from "../assets/placeholder-image.jpg";
 import AddToExhibitionModal from "./AddToExhibitionModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { getSortDate } from "../utils/getSortDate";
 
 function checkImageExists(imageUrl, callback) {
   if (!imageUrl) return callback(null);
@@ -132,6 +133,10 @@ function ObjectCard({ object, exhibitions, onAddToExhibition }) {
     setTimeout(() => setAddedConfirmationMessage(null), 3000);
   };
 
+  // Use getSortDate to compute a sortable date
+  const sortYear = getSortDate(object);
+  const displayDate = sortYear === 9999 ? "Unknown" : sortYear;
+
   return (
     <div className="object-card">
       {isLoading ? (
@@ -156,11 +161,7 @@ function ObjectCard({ object, exhibitions, onAddToExhibition }) {
       <h3>{object.record?.titles?.[0]?.title || object.title || "Untitled"}</h3>
       <p>{artistOrCulture}</p>
       <p>
-        <strong>Date:</strong>{" "}
-        {object.objectDate ||
-          object.objectBeginDate ||
-          object.record?.productionDates?.[0]?.date?.earliest ||
-          "Unknown"}
+        <strong>Date:</strong> {displayDate}
       </p>
       {object.objectID && <p>Met Object ID: {object.objectID}</p>}
       {object.record?.systemNumber && (
@@ -173,7 +174,9 @@ function ObjectCard({ object, exhibitions, onAddToExhibition }) {
           {addedConfirmationMessage.text}
         </div>
       )}
+
       <button onClick={() => setShowModal(true)}>Add to Exhibition</button>
+
       <AddToExhibitionModal
         show={showModal}
         onClose={() => setShowModal(false)}
