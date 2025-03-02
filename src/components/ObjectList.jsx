@@ -41,7 +41,6 @@ function ObjectList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [sortCriteria, setSortCriteria] = useState("date");
   const [sortOrder, setSortOrder] = useState("desc");
-  // Local state for date filtering; these will update on keystroke.
   const [yearFrom, setYearFrom] = useState("");
   const [yearTo, setYearTo] = useState("");
 
@@ -126,6 +125,13 @@ function ObjectList() {
     return result;
   };
 
+  const applyDateFilter = () => {
+    const effectiveYearFrom = yearFrom ? yearFrom : -500000;
+    const effectiveYearTo = yearTo ? yearTo : 2100;
+    performSearch(searchTerm, objectType, effectiveYearFrom, effectiveYearTo);
+    setCurrentPage(1);
+  };
+
   return (
     <div>
       {/* Sorting controls */}
@@ -166,7 +172,7 @@ function ObjectList() {
           value={objectType}
           onChange={(e) => {
             setCurrentPage(1);
-            performSearch(searchTerm, e.target.value);
+            performSearch(searchTerm, e.target.value, yearFrom, yearTo);
           }}
         >
           {objectTypes.map((type) => (
@@ -188,6 +194,9 @@ function ObjectList() {
             setYearFrom(e.target.value);
             setCurrentPage(1);
           }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") applyDateFilter();
+          }}
         />
         <label htmlFor="yearTo"> Year to: </label>
         <input
@@ -198,14 +207,11 @@ function ObjectList() {
             setYearTo(e.target.value);
             setCurrentPage(1);
           }}
-        />
-        <button
-          onClick={() => {
-            performSearch(searchTerm, objectType, yearFrom, yearTo);
+          onKeyDown={(e) => {
+            if (e.key === "Enter") applyDateFilter();
           }}
-        >
-          Apply Date Filter
-        </button>
+        />
+        <button onClick={applyDateFilter}>Apply Date Filter</button>
       </div>
 
       {loading && (

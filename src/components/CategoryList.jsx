@@ -8,7 +8,7 @@ function CategoryList() {
   const navigate = useNavigate();
 
   const handleCategoryClick = (categoryValue) => {
-    performSearch("", categoryValue);
+    performSearch("", categoryValue, "", "");
     navigate("/");
   };
 

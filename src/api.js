@@ -55,7 +55,7 @@ export const getMetObjects = (query, objectType = "", dateBegin, dateEnd) => {
       if (!searchResponse.data.objectIDs) return [];
       console.log("MET searchResponse:", searchResponse.data);
       const objectRequests = searchResponse.data.objectIDs
-        .slice(0, 5)
+        .slice(0, 50)
         .map((id) => getMetObjectById(id));
       return Promise.all(objectRequests);
     })
@@ -105,16 +105,15 @@ export const getVAObjects = (
       &kw_object_type=ceramic
       &kw_object_type=bronze
       &kw_object_type=marble
-      &kw_object_type=textile
-      &kw_object_type=metalwork
-      &kw_object_type=jewellery`.replace(/\s+/g, "");
+      &kw_object_type=textile`.replace(/\s+/g, "");
   }
+
   let dateParams = "";
-  if (yearMadeFrom != null && yearMadeTo != null) {
+  if (yearMadeFrom !== "" && yearMadeTo !== "") {
     dateParams = `&year_made_from=${yearMadeFrom}&year_made_to=${yearMadeTo}`;
   }
 
-  const vaUrl = `${vaApi.defaults.baseURL}/objects/search?q=${formattedQuery}&images_exist=true&page_size=5&response_format=json${typeParams}${dateParams}`;
+  const vaUrl = `${vaApi.defaults.baseURL}/objects/search?q=${formattedQuery}&images_exist=true&page_size=65&response_format=json${typeParams}${dateParams}`;
   console.log("Final V&A API URL:", vaUrl);
 
   return vaApi
@@ -128,6 +127,7 @@ export const getVAObjects = (
       return Promise.all(fullObjectRequests);
     })
     .then((fullObjects) => {
+      console.log("fullObjects", fullObjects);
       const validObjects = fullObjects.filter((obj) => obj !== null);
       console.log("Full V&A objects:", validObjects);
       return validObjects;
@@ -152,7 +152,7 @@ export const getMetObjectById = (id) => {
   return metApi
     .get(`/objects/${id}`)
     .then((res) => {
-      console.log(`Fetched MET object ${id}:`, res.data);
+      // console.log(`Fetched MET object ${id}:`, res.data);
       return res.data;
     })
     .catch((error) => {
