@@ -61,7 +61,7 @@ function ObjectCard({ object, exhibitions, onAddToExhibition }) {
 
   const artistOrCulture =
     object.artistDisplayName ||
-    object.record?.artistMakerPerson?.[0].name?.text ||
+    object.record?.artistMakerPerson?.[0]?.name?.text ||
     object.culture ||
     "Unknown";
 
@@ -152,8 +152,13 @@ function ObjectCard({ object, exhibitions, onAddToExhibition }) {
           />
         </div>
       ) : (
-        <div className="no-image">
-          <img src={placeholderImage} alt="No Image Available" width="150" />
+        <div className="no-image clickable-image">
+          <img
+            src={placeholderImage}
+            alt="No Image Available"
+            onClick={handleClick}
+            style={{ cursor: "pointer" }}
+          />
           <div className="overlay">No Image Available</div>
         </div>
       )}

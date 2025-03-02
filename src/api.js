@@ -12,15 +12,15 @@ const metApi = axios.create({
 const typeToMetMedium = {
   painting: "Paintings",
   sculpture: "Sculpture",
+  ceramic: "Ceramics",
+  antiquities: "",
   drawing: "Drawings",
   print: "Prints",
+  engraving: "Engravings",
   relief: "",
   manuscript: "",
-  engraving: "Engravings",
   mosaic: "",
   artifact: "",
-  antiquities: "",
-  ceramic: "Ceramics",
   bronze: "",
   marble: "",
   textile: "", // fallback to query keyword
@@ -134,10 +134,12 @@ export const getVAObjects = (query, objectType = "") => {
       &kw_object_type=ceramic
       &kw_object_type=bronze
       &kw_object_type=marble
-      &kw_object_type=textile`.replace(/\s+/g, "");
+      &kw_object_type=textile
+      &kw_object_type=metalwork
+      &kw_object_type=jewellery`.replace(/\s+/g, "");
   }
 
-  const vaUrl = `${vaApi.defaults.baseURL}/objects/search?q=${formattedQuery}&images_exist=true&page_size=1&response_format=json${typeParams}`;
+  const vaUrl = `${vaApi.defaults.baseURL}/objects/search?q=${formattedQuery}&images_exist=true&page_size=40&response_format=json${typeParams}`;
   console.log("Final V&A API URL:", vaUrl);
 
   return vaApi

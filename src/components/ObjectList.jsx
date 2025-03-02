@@ -11,15 +11,15 @@ const objectTypes = [
   { label: "All Types", value: "" },
   { label: "Painting", value: "painting" },
   { label: "Sculpture", value: "sculpture" },
+  { label: "Ceramic", value: "ceramic" },
   { label: "Drawing", value: "drawing" },
+  { label: "Engraving", value: "engraving" },
   { label: "Print", value: "print" },
   { label: "Relief", value: "relief" },
   { label: "Manuscript", value: "manuscript" },
-  { label: "Engraving", value: "engraving" },
   { label: "Mosaic", value: "mosaic" },
   { label: "Artifact", value: "artifact" },
   { label: "Antiquities", value: "antiquities" },
-  { label: "Ceramic", value: "ceramic" },
   { label: "Bronze", value: "bronze" },
   { label: "Marble", value: "marble" },
   { label: "Textile", value: "textile" },
@@ -31,7 +31,7 @@ function ObjectList() {
   const [exhibitions, setExhibitions] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortCriteria, setSortCriteria] = useState("date");
-  const [sortOrder, setSortOrder] = useState("asc");
+  const [sortOrder, setSortOrder] = useState("desc");
   const [selectedObjectType, setSelectedObjectType] = useState("");
 
   useEffect(() => {
@@ -52,13 +52,13 @@ function ObjectList() {
     } else if (sortCriteria === "artist") {
       const artistA = (
         a.artistDisplayName ||
-        a.record?.artistMakerPerson?.[0].name?.text ||
+        a.record?.artistMakerPerson?.[0]?.name?.text ||
         a.culture ||
         "Unknown"
       ).toLowerCase();
       const artistB = (
         b.artistDisplayName ||
-        b.record?.artistMakerPerson?.[0].name?.text ||
+        b.record?.artistMakerPerson?.[0]?.name?.text ||
         b.culture ||
         "Unknown"
       ).toLowerCase();

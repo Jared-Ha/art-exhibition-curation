@@ -95,6 +95,10 @@
 
 .no-image {
   position: relative;
+  width: 30%;
+  height: 30%;
+  margin: 0 auto;
+  cursor: pointer;
 }
 
 .no-image .overlay {
