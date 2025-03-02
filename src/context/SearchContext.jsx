@@ -14,25 +14,25 @@ export function SearchProvider({ children }) {
   const [loading, setLoading] = useState(false);
   const [searchAttempted, setSearchAttempted] = useState(false);
 
-  const performSearch = async (term, type = "") => {
-    if (!term || (term === searchTerm && type === objectType)) return;
+  const performSearch = (term, type = "") => {
+    if (!term && !type) return;
+    if (term === searchTerm && type === objectType) return;
 
     setSearchTerm(term);
     setObjectType(type);
     setLoading(true);
     setSearchAttempted(true);
 
-    try {
-      const [vaResults, metResults] = await Promise.all([
-        getVAObjects(term, type),
-        getMetObjects(term, type),
-      ]);
-      setObjects([...vaResults, ...metResults]);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
-      setLoading(false);
-    }
+    Promise.all([getVAObjects(term, type), getMetObjects(term, type)])
+      .then(([vaResults, metResults]) => {
+        setObjects([...vaResults, ...metResults]);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   useEffect(() => {

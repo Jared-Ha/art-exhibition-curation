@@ -6,7 +6,6 @@ import { getSortDate } from "../utils/getSortDate";
 
 const RESULTS_PER_PAGE = 10;
 
-// I think need to whittle these down
 const objectTypes = [
   { label: "All Types", value: "" },
   { label: "Painting", value: "painting" },
@@ -35,9 +34,7 @@ function ObjectList() {
   const [selectedObjectType, setSelectedObjectType] = useState("");
 
   useEffect(() => {
-    if (searchTerm) {
-      performSearch(searchTerm, selectedObjectType);
-    }
+    performSearch(searchTerm, selectedObjectType);
   }, [selectedObjectType]);
 
   useEffect(() => {
@@ -83,7 +80,6 @@ function ObjectList() {
     return 0;
   });
 
-  // Calculate pagination indices.
   const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
   const endIndex = startIndex + RESULTS_PER_PAGE;
   const currentObjects = sortedObjects.slice(startIndex, endIndex);
@@ -113,8 +109,6 @@ function ObjectList() {
 
   return (
     <div>
-      {/* <h2>Search Results</h2> */}
-
       {/* Sorting controls */}
       <div className="sorting-controls">
         <label htmlFor="sortCriteria">Sort by: </label>
@@ -163,16 +157,17 @@ function ObjectList() {
           ))}
         </select>
       </div>
-      {loading && searchTerm && (
+
+      {loading && (
         <p>
           <strong>"{searchTerm}"</strong> results loading...
         </p>
       )}
-      {!loading && searchTerm && (
+      {!loading && (
         <>
           <p>
             Showing results {startResult}-{endResult} for:{" "}
-            <strong>{searchTerm}</strong>
+            <strong>{searchTerm || selectedObjectType || "all"}</strong>
           </p>
           <p>Total results: {objects.length}</p>
         </>
