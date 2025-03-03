@@ -181,9 +181,7 @@ function ObjectCard({ object, exhibitions, onAddToExhibition }) {
         </div>
       )}
       <div className="objectcard-button-container">
-        <button onClick={handleClick} style={{ cursor: "pointer" }}>
-          View details
-        </button>
+        <button onClick={handleClick}>View details</button>
 
         <button onClick={() => setShowModal(true)}>Add to Exhibition</button>
       </div>

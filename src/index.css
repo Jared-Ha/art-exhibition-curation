@@ -65,7 +65,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 20px;
-  padding: 20px;
+  padding: 20px 0;
 }
 
 .object-card {
@@ -79,8 +79,21 @@
   max-width: 30rem;
 }
 
-.objectcard-button-container button {
+.objectcard-button-container button,
+.add-to-exhibtion {
   margin: 0rem 0.5rem;
+  padding: 10px 15px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: 5px;
+  text-align: center;
+  background: #6bbbe0;
+  color: #ffffff;
+}
+.add-to-exhibtion {
+  margin: 0;
+  margin-top: 0.5rem;
 }
 
 .added-confirmation-message,
@@ -156,6 +169,15 @@
 }
 .back-button {
   margin-bottom: 1rem;
+  width: 5rem;
+  padding: 5px 15px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: 5px;
+  text-align: center;
+  background: #b3babd;
+  color: #ffffff;
 }
 
 /**/
@@ -201,6 +223,8 @@
 
 .view-exhibition-object {
   text-align: left !important;
+  width: 400px !important;
+  margin: 0 0.5rem;
 }
 .clickable-image {
   cursor: pointer;
@@ -255,9 +279,11 @@
   padding: 20px;
   border-radius: 10px;
   width: 300px;
+  max-height: 90vh;
   text-align: center;
   position: relative;
   box-shadow: 0px 4px 10px #00000040;
+  overflow-y: auto;
 }
 
 .close-modal {
@@ -496,4 +522,14 @@
 }
 .clear-button:hover {
   background: #6bbbe0;
+}
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+.pagination button {
+  margin: 0 1rem;
+  min-width: 4.5rem;
 }

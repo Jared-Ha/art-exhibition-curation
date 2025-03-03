@@ -5,6 +5,8 @@ import { getVAObjectById, getMetObjectById } from "../api";
 import { getExhibitions, addToExhibition } from "../utils/exhibitionStorage";
 import AddToExhibitionModal from "./AddToExhibitionModal";
 import { useSearch } from "../context/SearchContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 
 function getObjectId(object) {
   return object.objectID || object.record.systemNumber || object.id;
@@ -153,7 +155,7 @@ function SingleObject() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          View on Museum Site
+          View on Museum Site <FontAwesomeIcon icon={faUpRightFromSquare} />
         </a>
       ) : null}
 
@@ -165,7 +167,9 @@ function SingleObject() {
         </div>
       )}
 
-      <button onClick={() => setShowModal(true)}>Add to Exhibition</button>
+      <button className="add-to-exhibtion" onClick={() => setShowModal(true)}>
+        Add to Exhibition
+      </button>
 
       <AddToExhibitionModal
         show={showModal}
