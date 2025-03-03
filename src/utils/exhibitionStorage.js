@@ -8,14 +8,19 @@ export const getExhibitions = () => {
     const dummyExhibition = [
       {
         id: "test-exhibition",
-        name: "Test Exhibition",
+        name: "My Monet Exhibition",
         objects: [
           {
             id: "object-123",
-            title: "Starry Night",
-            artistDisplayName: "Vincent van Gogh",
+            title: "Camille Monet (1847–1879) on a Garden Bench",
+            artistDisplayName: "Claude Monet",
+            objectDate: 1873,
+            artistDisplayBio: "French, Paris 1840–1926 Giverny",
+            medium: "Oil on canvas",
+            dimensions: "23 7/8 x 31 5/8 in. (60.6 x 80.3 cm)",
             image:
-              "https://upload.wikimedia.org/wikipedia/commons/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg",
+              "https://collectionapi.metmuseum.org/api/collection/v1/iiif/438003/2006252/restricted",
+            objectURL: "https://www.metmuseum.org/art/collection/search/438003",
           },
         ],
       },

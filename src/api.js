@@ -112,7 +112,6 @@ export const getMetObjects = (query, objectType = "", dateBegin, dateEnd) => {
     });
 };
 
-//////////////////
 // --- V&A API Code ---
 export const getVAObjects = (
   query,
