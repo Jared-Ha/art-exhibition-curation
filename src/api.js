@@ -69,7 +69,7 @@ export const getMetObjects = (query, objectType = "", dateBegin, dateEnd) => {
     .then((searchResponse) => {
       if (!searchResponse.data.objectIDs) return [];
       const objectRequests = searchResponse.data.objectIDs
-        .slice(0, 1)
+        .slice(0, 50)
         .map((id) => getMetObjectById(id));
       return Promise.all(objectRequests);
     })
