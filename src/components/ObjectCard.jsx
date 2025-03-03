@@ -22,11 +22,14 @@ function checkImageExists(imageUrl, callback) {
 function fetchMetOgImage(objectURL, setImageSrc, setIsLoading) {
   setIsLoading(true);
   fetch(
-    `http://localhost:5000/fetch-image?url=${encodeURIComponent(objectURL)}`
+    `https://exhibition-curation-be-image-fetcher.onrender.com/fetch-image?url=${encodeURIComponent(
+      objectURL
+    )}`
   )
     .then((res) => res.json())
     .then((data) => {
       setImageSrc(data.imageUrl || null);
+      console.log("image fetched");
     })
     .catch(() => {
       setImageSrc(null);
