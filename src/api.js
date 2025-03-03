@@ -1,4 +1,6 @@
 import axios from "axios";
+import pLimit from "p-limit";
+const limit = pLimit(5);
 
 const vaApi = axios.create({
   baseURL: "https://api.vam.ac.uk/v2",
@@ -130,8 +132,6 @@ export const getVAObjects = (
       &kw_object_type=manuscript
       &kw_object_type=engraving
       &kw_object_type=mosaic
-      &kw_object_type=artifact
-      &kw_object_type=antiquities
       &kw_object_type=ceramic
       &kw_object_type=bronze
       &kw_object_type=marble
@@ -146,14 +146,14 @@ export const getVAObjects = (
     dateParams += `&year_made_to=${yearMadeTo}`;
   }
 
-  const vaUrl = `${vaApi.defaults.baseURL}/objects/search?q=${formattedQuery}&images_exist=true&page_size=100&response_format=json${typeParams}${dateParams}`;
+  const vaUrl = `${vaApi.defaults.baseURL}/objects/search?q=${formattedQuery}&images_exist=true&page_size=75&response_format=json${typeParams}${dateParams}`;
 
   return vaApi
     .get(vaUrl)
     .then((response) => {
       const summaryRecords = response.data.records || [];
       const fullObjectRequests = summaryRecords.map((record) =>
-        getVAObjectById(record.systemNumber).catch(() => null)
+        limit(() => getVAObjectById(record.systemNumber).catch(() => null))
       );
       return Promise.all(fullObjectRequests);
     })

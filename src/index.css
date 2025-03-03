@@ -75,6 +75,7 @@
   background: #f0f8ff;
   text-align: center;
   position: relative;
+  box-shadow: 3px 3px 5px #888888;
 }
 
 .objectcard-button-container button {
@@ -161,6 +162,7 @@
   padding: 15px;
   border-radius: 8px;
   margin-bottom: 15px;
+  box-shadow: 3px 3px 5px #888888;
   background-color: #f9f9f9;
 }
 .exhibition-info {
