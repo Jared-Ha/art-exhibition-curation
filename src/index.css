@@ -79,6 +79,14 @@
   max-width: 30rem;
 }
 
+.object-card h3 {
+  transition: color 0.2s ease-in-out;
+}
+
+.object-card h3:hover {
+  color: #6bbbe0;
+}
+
 .objectcard-button-container button,
 .add-to-exhibtion {
   margin: 0rem 0.5rem;
@@ -94,6 +102,12 @@
 .add-to-exhibtion {
   margin: 0;
   margin-top: 0.5rem;
+}
+
+.objectcard-button-container button:hover,
+.add-to-exhibtion:hover {
+  background: #4ba8d3;
+  color: #e4e4e4;
 }
 
 .added-confirmation-message,
@@ -136,9 +150,7 @@
 
 .no-image {
   position: relative;
-  width: 30%;
-  height: 30%;
-  margin: 0 auto;
+  /* margin: 0 auto; */
   cursor: pointer;
 }
 
@@ -178,6 +190,10 @@
   text-align: center;
   background: #b3babd;
   color: #ffffff;
+  transition: background 0.2s ease-in-out;
+}
+.back-button:hover {
+  background: #8e9192;
 }
 
 /**/
@@ -416,6 +432,10 @@
 
 .category-card:hover {
   transform: scale(1.1);
+}
+.category-icon {
+  width: 131px;
+  max-width: 100%;
 }
 
 /* Container for all controls */
