@@ -8,7 +8,7 @@ export const getExhibitions = () => {
     const dummyExhibition = [
       {
         id: "test-exhibition",
-        name: "My Monet Exhibition",
+        name: "My Exhibition",
         objects: [
           {
             id: "object-123",
