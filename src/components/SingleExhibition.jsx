@@ -81,7 +81,11 @@ function SingleExhibition() {
               />
             </div>
             <h3>{object.title}</h3>
-            <p>{object.artistDisplayName || "Unknown Artist"}</p>
+            <p>
+              {object.artistDisplayName ||
+                object.record?.artistMakerPerson[0]?.name?.text ||
+                "Unknown Artist"}
+            </p>
             <div className="button-group">
               <button onClick={() => setSelectedObject(object)}>View</button>
               <button
@@ -151,22 +155,34 @@ function SingleExhibition() {
             />
             <p>
               <strong>Artist:</strong>{" "}
-              {selectedObject.artistDisplayName || "Unknown Artist"}
+              {selectedObject.artistDisplayName ||
+                selectedObject.record?.artistMakerPerson?.[0]?.name?.text ||
+                "Unknown"}
             </p>
             <p>
               <strong>Artist Bio:</strong>{" "}
               {selectedObject.artistDisplayBio || "No bio available"}
             </p>
             <p>
-              <strong>Date:</strong> {selectedObject.objectDate || "Unknown"}
+              <strong>Date:</strong>{" "}
+              {selectedObject.objectDate ||
+                selectedObject.record?.productionDates?.[0]?.date?.text ||
+                "Unknown"}
             </p>
             <p>
               <strong>Medium:</strong>{" "}
-              {selectedObject.medium || "Not specified"}
+              {selectedObject.medium ||
+                selectedObject.record?.materialsAndTechniques ||
+                "Not specified"}{" "}
             </p>
             <p>
               <strong>Dimensions:</strong>{" "}
-              {selectedObject.dimensions || "Not specified"}
+              {selectedObject.dimensions ||
+                (selectedObject.record?.dimensions &&
+                  selectedObject.record.dimensions
+                    .map((d) => `${d.dimension}: ${d.value} ${d.unit}`)
+                    .join(", ")) ||
+                "Not specified"}
             </p>
             <p>
               <strong>Description:</strong>{" "}
