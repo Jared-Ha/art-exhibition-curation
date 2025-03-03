@@ -14,6 +14,8 @@ export function SearchProvider({ children }) {
   const [loading, setLoading] = useState(false);
   const [searchAttempted, setSearchAttempted] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [yearFrom, setYearFrom] = useState("");
+  const [yearTo, setYearTo] = useState("");
 
   const performSearch = (term, type = undefined, dateBegin, dateEnd) => {
     if (!term && type === undefined && dateBegin == null && dateEnd == null)
@@ -58,6 +60,10 @@ export function SearchProvider({ children }) {
         performSearch,
         currentPage,
         setCurrentPage,
+        yearFrom,
+        setYearFrom,
+        yearTo,
+        setYearTo,
       }}
     >
       {children}

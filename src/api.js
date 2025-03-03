@@ -62,6 +62,7 @@ export const getMetObjects = (query, objectType = "", dateBegin, dateEnd) => {
   if (dateEnd !== "" && dateEnd) {
     metUrl += `&dateEnd=${dateEnd}`;
   }
+  // console.log("Final Met API URL:", metUrl);
 
   return metApi
     .get("/search", { params })

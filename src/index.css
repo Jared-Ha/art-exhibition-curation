@@ -76,6 +76,7 @@
   text-align: center;
   position: relative;
   box-shadow: 3px 3px 5px #888888;
+  max-width: 30rem;
 }
 
 .objectcard-button-container button {
@@ -145,6 +146,8 @@
   flex-direction: column;
   align-content: center;
   flex-wrap: wrap;
+  max-width: 475px;
+  margin: 0 auto;
 }
 .single-object img {
   width: 100%;
@@ -481,4 +484,16 @@
 #yearFrom,
 #yearTo {
   max-width: 4.5rem;
+}
+
+.clear-button {
+  border-radius: 6px;
+  margin: 0.25rem;
+  border: none;
+}
+.header-filter {
+  font-weight: 600;
+}
+.clear-button:hover {
+  background: #6bbbe0;
 }

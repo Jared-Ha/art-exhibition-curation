@@ -38,27 +38,49 @@ function ObjectList() {
     performSearch,
     currentPage,
     setCurrentPage,
+    yearFrom,
+    setYearFrom,
+    yearTo,
+    setYearTo,
   } = useSearch();
   const [exhibitions, setExhibitions] = useState([]);
   const [sortCriteria, setSortCriteria] = useState("date");
-  const [sortOrder, setSortOrder] = useState("desc");
-  const [yearFrom, setYearFrom] = useState("");
-  const [yearTo, setYearTo] = useState("");
+  const [sortOrder, setSortOrder] = useState("asc");
 
   useEffect(() => {
     setExhibitions(getExhibitions());
   }, [objectType]);
 
-  let headerMessage;
-  if (searchTerm && objectType) {
-    headerMessage = `"${searchTerm}" in ${formatObjectType(objectType)}`;
-  } else if (searchTerm) {
-    headerMessage = `"${searchTerm}"`;
-  } else if (objectType) {
-    headerMessage = formatObjectType(objectType);
-  } else {
-    headerMessage = "all";
-  }
+  const headerMessage = (
+    <span>
+      {searchTerm && (
+        <span className="header-filter">
+          "{searchTerm}"
+          <button
+            className="clear-button"
+            onClick={() => performSearch("", objectType, yearFrom, yearTo)}
+          >
+            X
+          </button>
+        </span>
+      )}
+      {searchTerm && objectType && " in "}
+      {objectType && (
+        <>
+          <span className="header-filter">
+            {formatObjectType(objectType)}
+            <button
+              className="clear-button"
+              onClick={() => performSearch(searchTerm, "", yearFrom, yearTo)}
+            >
+              X
+            </button>
+          </span>
+        </>
+      )}
+      {!searchTerm && !objectType && "all"}
+    </span>
+  );
 
   const sortedObjects = [...objects].sort((a, b) => {
     if (sortCriteria === "date") {
@@ -230,8 +252,7 @@ function ObjectList() {
       ) : searchTerm || objectType ? (
         <>
           <p>
-            Showing results {startResult}-{endResult} for:{" "}
-            <strong>{headerMessage}</strong>
+            Showing results {startResult}-{endResult} for: {headerMessage}
           </p>
           <p>Total results: {objects.length}</p>
         </>
