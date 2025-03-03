@@ -40,7 +40,7 @@ function fetchMetOgImage(objectURL, setImageSrc, setIsLoading) {
 }
 
 function constructVAHighResImage(baseUrl) {
-  return baseUrl ? `${baseUrl}full/full/0/default.jpg` : null;
+  return baseUrl ? `${baseUrl}full/!500,500/0/default.jpg` : null;
 }
 
 function ObjectCard({ object, exhibitions, onAddToExhibition }) {
@@ -170,7 +170,10 @@ function ObjectCard({ object, exhibitions, onAddToExhibition }) {
       </h3>
       <p>{artistOrCulture}</p>
       <p>
-        <strong>Date:</strong> {displayDate}
+        <strong>Date:</strong>{" "}
+        {object.record
+          ? object.record.productionDates?.[0]?.date?.text || "Unknown"
+          : object.objectBeginDate || "Unknown"}
       </p>
 
       {addedConfirmationMessage && (
