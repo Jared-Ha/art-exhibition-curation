@@ -1,10 +1,35 @@
 const EXHIBITIONS_KEY = "exhibitions";
 
-export const getExhibitions = () => {
-  const storedExhibitions =
-    JSON.parse(localStorage.getItem(EXHIBITIONS_KEY)) || [];
+function safeLocalStorageGet(key) {
+  if (typeof window === "undefined" || !window.localStorage) return null;
+  try {
+    return localStorage.getItem(key);
+  } catch (error) {
+    console.error("Error accessing localStorage:", error);
+    return null;
+  }
+}
 
-  if (storedExhibitions.length === 0) {
+function safeLocalStorageSet(key, value) {
+  if (typeof window === "undefined" || !window.localStorage) return;
+  try {
+    localStorage.setItem(key, value);
+  } catch (error) {
+    console.error("Error saving to localStorage:", error);
+  }
+}
+
+export const getExhibitions = () => {
+  const storedExhibitions = safeLocalStorageGet(EXHIBITIONS_KEY);
+  let exhibitions = [];
+  try {
+    exhibitions = storedExhibitions ? JSON.parse(storedExhibitions) : [];
+  } catch (error) {
+    console.error("Error parsing exhibitions from localStorage:", error);
+    exhibitions = [];
+  }
+
+  if (exhibitions.length === 0) {
     const dummyExhibition = [
       {
         id: "test-exhibition",
@@ -25,15 +50,14 @@ export const getExhibitions = () => {
         ],
       },
     ];
-    localStorage.setItem(EXHIBITIONS_KEY, JSON.stringify(dummyExhibition));
+    safeLocalStorageSet(EXHIBITIONS_KEY, JSON.stringify(dummyExhibition));
     return dummyExhibition;
   }
-
-  return storedExhibitions;
+  return exhibitions;
 };
 
 export const saveExhibitions = (exhibitions) => {
-  localStorage.setItem(EXHIBITIONS_KEY, JSON.stringify(exhibitions));
+  safeLocalStorageSet(EXHIBITIONS_KEY, JSON.stringify(exhibitions));
 };
 
 export const addToExhibition = (exhibitionName, object) => {
