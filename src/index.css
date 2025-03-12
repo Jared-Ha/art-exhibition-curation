@@ -69,13 +69,11 @@
 }
 
 .object-card {
-  border: 1px solid #ddd;
   padding: 10px;
   border-radius: 8px;
-  background: #f0f8ff;
   text-align: center;
   position: relative;
-  box-shadow: 3px 3px 5px #888888;
+  box-shadow: 3px 0px 12px #0000001e;
   max-width: 30rem;
 }
 
@@ -87,8 +85,16 @@
   color: #6bbbe0;
 }
 
+.objectcard-button-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
 .objectcard-button-container button,
-.add-to-exhibtion {
+.add-to-exhibtion,
+.view-button {
   margin: 0rem 0.5rem;
   padding: 10px 15px;
   border: none;
@@ -248,13 +254,28 @@
 
 .clickable-image img {
   transition: opacity 0.2s ease-in-out;
+  max-height: 300px;
+  width: auto;
 }
 
 .clickable-image:hover img {
   opacity: 0.7;
 }
 
-.delete-confirm-btn {
+/* .delete-button {
+  color: #777777 !important;
+  outline: solid 1px #afafaf;
+  border-radius: 4px;
+  border: none;
+}
+.delete-button:hover {
+  color: #000 !important;
+  outline: solid 1px #ff3e3e;
+  background: #ffc9c9;
+} */
+
+.delete-confirm-btn,
+.delete-button {
   background-color: #ff4d4d;
   color: #fff;
   border: none;
@@ -263,7 +284,8 @@
   cursor: pointer;
 }
 
-.delete-confirm-btn:hover {
+.delete-confirm-btn:hover,
+.delete-button:hover {
   background-color: #e60000;
 }
 .button-group {
@@ -348,17 +370,7 @@
 .added-confirmation-message {
   color: green;
 }
-.delete-button {
-  color: #777777 !important;
-  outline: solid 1px #afafaf;
-  border-radius: 4px;
-  border: none;
-}
-.delete-button:hover {
-  color: #000 !important;
-  outline: solid 1px #ff3e3e;
-  background: #ffc9c9;
-}
+
 .exhibition-actions {
   display: flex;
   justify-content: space-around;

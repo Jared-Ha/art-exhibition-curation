@@ -25,7 +25,9 @@ function ExhibitionCard({ exhibition, onDelete, onView }) {
       </div>
 
       <div className="exhibition-actions">
-        <button onClick={() => onView(exhibition.id)}>View Exhibition</button>
+        <button className="view-button" onClick={() => onView(exhibition.id)}>
+          View Exhibition
+        </button>
         <button
           className="delete-button"
           onClick={() => onDelete(exhibition.id)}

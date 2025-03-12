@@ -87,7 +87,12 @@ function SingleExhibition() {
                 "Unknown Artist"}
             </p>
             <div className="button-group">
-              <button onClick={() => setSelectedObject(object)}>View</button>
+              <button
+                className="view-button"
+                onClick={() => setSelectedObject(object)}
+              >
+                View
+              </button>
               <button
                 className="delete-button"
                 onClick={() => setObjectToRemove(object)}
