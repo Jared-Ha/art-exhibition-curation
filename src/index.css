@@ -255,6 +255,7 @@
 .clickable-image img {
   transition: opacity 0.2s ease-in-out;
   max-height: 300px;
+  max-width: 100%;
   width: auto;
 }
 
@@ -448,6 +449,8 @@
 .category-icon {
   width: 131px;
   max-width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
 }
 
 /* Container for all controls */
@@ -537,6 +540,7 @@
 }
 
 .order-toggle {
+  cursor: pointer;
   padding: 0.3rem;
 }
 #yearFrom,
@@ -548,6 +552,7 @@
   border-radius: 6px;
   margin: 0.25rem;
   border: none;
+  cursor: pointer;
 }
 .header-filter {
   font-weight: 600;
