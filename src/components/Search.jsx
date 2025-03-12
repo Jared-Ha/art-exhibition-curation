@@ -16,7 +16,7 @@ function Search() {
     if (!searchInput.trim()) return;
     performSearch(searchInput.trim());
     setSearchInput("");
-    navigate("/");
+    navigate("/explore");
   };
 
   return (

@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import Search from "./components/Search";
+import LandingPage from "./components/LandingPage";
 import ObjectList from "./components/ObjectList";
 import CategoryList from "./components/CategoryList";
 import ExhibitionList from "./components/ExhibitionList";
@@ -14,7 +15,8 @@ function App() {
       <Header />
       <Search />
       <Routes>
-        <Route path="/" element={<ObjectList />} />
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/explore" element={<ObjectList />} />
         <Route path="/object/:id" element={<SingleObject />} />
         <Route path="/my-exhibitions" element={<ExhibitionList />} />
         <Route path="/exhibition/:id" element={<SingleExhibition />} />

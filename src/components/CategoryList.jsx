@@ -31,7 +31,7 @@ function CategoryList() {
 
   const handleCategoryClick = (categoryValue) => {
     performSearch("", categoryValue, "", "");
-    navigate("/");
+    navigate("/explore");
   };
 
   return (
