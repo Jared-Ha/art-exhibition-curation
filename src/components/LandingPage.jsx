@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import heroVideo from "../assets/hero-video.mp4";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import searchIcon from "../assets/icons/search-icon.png";
+import filterIcon from "../assets/icons/filter-icon.png";
+import curateIcon from "../assets/icons/curate-icon.png";
 
 function LandingPage() {
   const [showLearnMore, setShowLearnMore] = useState(false);
@@ -58,8 +63,8 @@ function LandingPage() {
           <div className="features-list">
             <div className="feature">
               <img
-                src="/assets/icons/search-icon.png"
-                alt="Search Artworks"
+                src={searchIcon}
+                alt="Search icon"
                 className="feature-icon"
               />
               <p>
@@ -69,8 +74,8 @@ function LandingPage() {
             </div>
             <div className="feature">
               <img
-                src="/assets/icons/filter-icon.png"
-                alt="Filter & Sort"
+                src={filterIcon}
+                alt="Filter & Sort icon"
                 className="feature-icon"
               />
               <p>
@@ -80,8 +85,8 @@ function LandingPage() {
             </div>
             <div className="feature">
               <img
-                src="/assets/icons/curate-icon.png"
-                alt="Curate Exhibitions"
+                src={curateIcon}
+                alt="Curate icon"
                 className="feature-icon"
               />
               <p>

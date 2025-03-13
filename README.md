@@ -28,14 +28,28 @@ Welcome to **CurateFlow**, a web app that lets you explore, view, and create vir
 
 ### Frontend Setup
 
-1. **Clone the repository:**  
-   `git clone https://github.com/Jared-Ha/art-exhibition-curation.git`
-2. **Enter the folder:**  
-   `cd art-exhibition-curation`
-3. **Install dependencies:**  
-   `npm install`
-4. **Start the development server:**  
-   `npm run dev`
+1. **Clone the repository:**
+   ```
+   git clone https://github.com/Jared-Ha/art-exhibition-curation.git
+   ```
+2. **Enter the folder:**
+
+   ```
+   cd art-exhibition-curation
+   ```
+
+3. **Install dependencies:**
+
+   ```
+   npm install
+   ```
+
+4. **Start the development server:**
+
+   ```
+   npm run dev
+   ```
+
 5. **Open your browser:**  
    Visit the URL provided in your terminal (for example, `http://localhost:3000`).
 
@@ -43,14 +57,22 @@ Welcome to **CurateFlow**, a web app that lets you explore, view, and create vir
 
 The backend is a separate, standalone service that fetches images from external websites (using Open Graph metadata) to support the frontend.
 
-1. **Clone the repository:**  
-   `git clone https://github.com/Jared-Ha/exhibition-curation-be-image-fetcher.git`
-2. **Enter the folder:**  
-   `cd exhibition-curation-be-image-fetcher`
-3. **Install dependencies:**  
-   `npm install`
-4. **Start the server:**  
-   `npm start`  
+1. **Clone the repository:**
+   ```
+   git clone https://github.com/Jared-Ha/exhibition-curation-be-image-fetcher.git
+   ```
+2. **Enter the folder:**
+   ```
+   cd exhibition-curation-be-image-fetcher
+   ```
+3. **Install dependencies:**
+   ```
+   npm install
+   ```
+4. **Start the server:**
+   ```
+   npm start
+   ```
    (The backend runs on `http://localhost:5000` by default.)
 
 > **Note:** When running the frontend locally, you can continue to use the hosted backend on Render by default.
