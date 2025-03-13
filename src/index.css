@@ -792,6 +792,20 @@
   margin: 25px auto;
 }
 
+.page {
+  opacity: 0;
+  animation: fadeIn 0.4s ease-in forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 @media (max-width: 768px) {
   .nav a {
     font-size: 0.9rem;

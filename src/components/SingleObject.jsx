@@ -113,7 +113,7 @@ function SingleObject() {
     : object.classification || object.objectName || "No description available.";
 
   return (
-    <div className="single-object">
+    <div className="single-object page">
       <button onClick={() => navigate(-1)} className="back-button">
         ← Back
       </button>

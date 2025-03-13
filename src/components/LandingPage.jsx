@@ -12,7 +12,7 @@ function LandingPage() {
   const navigate = useNavigate();
 
   return (
-    <div className="landing-page">
+    <div className="page landing-page">
       {/* Background Video */}
       <video className="hero-video" autoPlay loop muted playsInline>
         <source src={heroVideo} type="video/mp4" />

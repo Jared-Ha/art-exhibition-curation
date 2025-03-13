@@ -35,7 +35,7 @@ function CategoryList() {
   };
 
   return (
-    <div className="category-list">
+    <div className="category-list page">
       {objectTypes
         .filter((cat) => cat.value !== "")
         .map((cat) => {

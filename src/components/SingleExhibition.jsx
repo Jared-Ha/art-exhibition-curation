@@ -63,7 +63,7 @@ function SingleExhibition() {
   if (!exhibition) return <p>Exhibition not found.</p>;
 
   return (
-    <section>
+    <section className="page">
       <h2>{exhibition.name}</h2>
       <p>{exhibition.objects.length} items</p>
 

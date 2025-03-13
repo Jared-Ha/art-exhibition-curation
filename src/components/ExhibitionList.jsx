@@ -43,7 +43,7 @@ function ExhibitionList() {
   };
 
   return (
-    <section>
+    <section className="page">
       <h2>Your Curated Exhibitions</h2>
 
       <div>

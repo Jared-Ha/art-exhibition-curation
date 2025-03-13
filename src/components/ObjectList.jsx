@@ -157,7 +157,8 @@ function ObjectList() {
   };
 
   return (
-    <div>
+    <div className="page">
+      {" "}
       {/* Container for all controls */}
       <div className="controls-container">
         {/* Row that holds sorting and filtering side by side */}
@@ -244,7 +245,6 @@ function ObjectList() {
           </div>
         </div>
       </div>
-
       {/* Loading / results info */}
       {/* Skeleton Loaders */}
       {loading ? (
@@ -261,11 +261,9 @@ function ObjectList() {
           <p>Total results: {objects.length}</p>
         </>
       ) : null}
-
       {!loading && searchAttempted && objects.length === 0 && (
         <p>No results found</p>
       )}
-
       {/* Render the object cards */}
       <ul className="object-grid">
         {currentObjects.map((obj, index) => (
@@ -277,7 +275,6 @@ function ObjectList() {
           />
         ))}
       </ul>
-
       {/* Pagination */}
       {objects.length > RESULTS_PER_PAGE && (
         <div className="pagination">
