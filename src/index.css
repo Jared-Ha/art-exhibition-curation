@@ -734,6 +734,63 @@
   margin: 0 1rem;
   min-width: 4.5rem;
 }
+/* Skeleton grid and image loading placeholders */
+
+.skeleton {
+  width: 100%;
+  height: 250px;
+  background: linear-gradient(90deg, #d8d8d8 25%, #f0f0f0 50%, #e0e0e0 75%);
+  background-size: 200% 100%;
+  border-radius: 8px;
+  animation: shimmer 3s infinite linear;
+}
+
+/* Shimmer animation */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Object Card Skeleton Styles */
+.skeleton-card {
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+  max-width: 30rem;
+  box-shadow: 3px 0px 12px #0000001e;
+  background: #fff;
+}
+
+/* Image Placeholder */
+.skeleton-image {
+  width: 100%;
+  height: 250px;
+}
+
+/* Title Placeholder */
+.skeleton-title {
+  width: 90%;
+  height: 35px;
+  padding: 0.5rem;
+  margin: 40px auto;
+}
+
+.skeleton-artist {
+  width: 70%;
+  height: 20px;
+  margin: 25px auto;
+  padding: 0.25rem;
+}
+.skeleton-date {
+  width: 70%;
+  height: 20px;
+  padding: 0.25rem;
+  margin: 25px auto;
+}
 
 @media (max-width: 768px) {
   .nav a {

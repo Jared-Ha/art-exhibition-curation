@@ -5,6 +5,7 @@ import ObjectCard from "./ObjectCard";
 import { getSortDate } from "../utils/getSortDate";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import SkeletonObjectCard from "./SkeletonObjectCard";
 
 const RESULTS_PER_PAGE = 10;
 
@@ -245,9 +246,12 @@ function ObjectList() {
       </div>
 
       {/* Loading / results info */}
+      {/* Skeleton Loaders */}
       {loading ? (
-        <div className="loading-spinner">
-          <FontAwesomeIcon icon={faSpinner} spin size="5x" />
+        <div className="object-grid">
+          {[...Array(RESULTS_PER_PAGE)].map((_, index) => (
+            <SkeletonObjectCard key={index} />
+          ))}
         </div>
       ) : searchTerm || objectType ? (
         <>

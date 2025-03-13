@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import placeholderImage from "../assets/placeholder-image.jpg";
 import AddToExhibitionModal from "./AddToExhibitionModal";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { getSortDate } from "../utils/getSortDate";
 
 function checkImageExists(imageUrl, callback) {
@@ -142,9 +142,7 @@ function ObjectCard({ object, exhibitions, onAddToExhibition }) {
   return (
     <div className="object-card">
       {isLoading ? (
-        <div className="loading-spinner">
-          <FontAwesomeIcon icon={faSpinner} spin size="2x" />
-        </div>
+        <div className="skeleton "></div>
       ) : imageSrc ? (
         <div className="clickable-image">
           <img
