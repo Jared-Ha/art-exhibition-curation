@@ -23,7 +23,10 @@ function LandingPage() {
       <div className="landing-content">
         {/* Hero Section */}
         <div className="hero-section">
-          <h1>Explore Artwork and Curate Online Exhibitions</h1>
+          <h1>
+            <span className="highlight-explore">Explore</span> artwork &
+            <span className="highlight-curate"> Curate</span> online Exhibitions
+          </h1>
           <h2>
             Discover masterpieces and antiques from world-renowned collections{" "}
             <br></br>

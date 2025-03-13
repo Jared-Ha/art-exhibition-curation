@@ -2,9 +2,9 @@ import React from "react";
 
 function ExhibitionCard({ exhibition, onDelete, onView }) {
   return (
-    <div className="object-card">
-      <div className="exhibition-info">
-        <h3 onClick={() => onView(exhibition.id)}>{exhibition.name}</h3>
+    <div className="exhibition-card">
+      <div onClick={() => onView(exhibition.id)} className="exhibition-info">
+        <h3>{exhibition.name}</h3>
         <p>({exhibition.objects.length} items)</p>
       </div>
 

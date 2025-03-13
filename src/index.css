@@ -134,6 +134,18 @@
   font-size: 2rem;
   margin-bottom: 0.5rem;
 }
+.highlight-explore {
+  background: linear-gradient(to right, #ac3a34, #df7a74);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.highlight-curate {
+  background: linear-gradient(to right, #2486a1, #83bccc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
 
 .hero-section h2 {
   font-size: 1.25 rem;
@@ -142,19 +154,15 @@
 }
 
 .cta-button {
-  padding: 12px 24px;
-  font-size: 1rem;
-  background-color: #6bbbe0;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-bottom: 20px;
-  transition: background 0.2s ease;
+  padding: 12px 32px !important;
+  font-size: 1.2rem;
+  transition: scale 0.2s ease;
 }
 
 .cta-button:hover {
-  background-color: #4ba8d3;
+  scale: 1.1;
+  color: #fff !important;
+  background: linear-gradient(to right, #6bbbe0, #8ebfd6) !important;
 }
 
 .intro-text p {
@@ -162,14 +170,18 @@
   line-height: 1.5;
   margin-bottom: 1rem;
 }
+.intro-text {
+  padding: 1rem 6vw;
+}
 
 .value-proposition {
-  margin-top: 40px;
+  margin-top: 10px;
 }
 
 .value-proposition h3 {
   font-size: 1.75rem;
   margin-bottom: 20px;
+  margin-top: 0;
 }
 
 .features-list {
@@ -208,13 +220,14 @@
   padding: 20px 0;
 }
 
-.object-card {
+.object-card,
+.exhibition-card {
   padding: 10px;
   border-radius: 8px;
   text-align: center;
   position: relative;
-  box-shadow: 3px 0px 12px #0000001e;
   max-width: 30rem;
+  box-shadow: 3px 0px 12px #0000001e;
   background: #fff;
 }
 
@@ -222,7 +235,8 @@
   transition: color 0.1s ease-in-out;
 }
 
-.object-card h3:hover {
+.object-card h3:hover,
+.exhibition-info:hover {
   color: #6bbbe0;
 }
 
@@ -235,7 +249,8 @@
 
 .objectcard-button-container button,
 .add-to-exhibtion,
-.view-button {
+.view-button,
+.cta-button {
   margin: 0rem 0.5rem;
   padding: 10px 15px;
   border: none;
@@ -252,7 +267,9 @@
 }
 
 .objectcard-button-container button:hover,
-.add-to-exhibtion:hover {
+.add-to-exhibtion:hover,
+.view-button:hover,
+.cta-button:hover {
   background: #4ba8d3;
   color: #e4e4e4;
 }
@@ -320,6 +337,8 @@
   flex-wrap: wrap;
   max-width: 475px;
   margin: 0 auto;
+  box-shadow: 3px 0px 12px #0000001e;
+  background: #fff;
 }
 .single-object img {
   width: 100%;
@@ -355,10 +374,7 @@
 }
 .exhibition-info {
   cursor: pointer;
-  transition: opacity 0.2s ease-in-out;
-}
-.exhibition-info:hover {
-  opacity: 0.7;
+  transition: color 0.1s ease-in-out;
 }
 
 .exhibition-header {
@@ -398,10 +414,12 @@
   max-height: 300px;
   max-width: 100%;
   width: auto;
+  transition: scale 0.2s ease;
 }
 
-.clickable-image:hover img {
+.clickable-image img:hover {
   opacity: 0.7;
+  scale: 1.03;
 }
 
 /* .delete-button {
@@ -479,6 +497,9 @@
 
 .close-modal:hover {
   color: #000;
+}
+.learn-more p {
+  margin-top: 2rem;
 }
 
 .modal label {
@@ -586,6 +607,7 @@
 
 .category-card:hover {
   transform: scale(1.1);
+  color: #6bbbe0;
 }
 .category-icon {
   width: 131px;
@@ -714,6 +736,9 @@
 }
 
 @media (max-width: 768px) {
+  .nav a {
+    font-size: 0.9rem;
+  }
   .landing-page {
     padding: 0 1rem;
   }
@@ -726,5 +751,8 @@
   }
   .hero-section h2 {
     font-size: 1.2rem;
+  }
+  .intro-text {
+    padding: 0;
   }
 }
