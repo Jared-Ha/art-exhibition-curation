@@ -229,6 +229,7 @@
   max-width: 30rem;
   box-shadow: 3px 0px 12px #0000001e;
   background: #fff;
+  margin: 0 1rem;
 }
 
 .object-card h3 {
