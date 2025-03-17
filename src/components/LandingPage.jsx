@@ -118,7 +118,7 @@ function LandingPage() {
               This site uses your browser's local storage to save your curated
               exhibitions so that they remain available even after you close
               your browser. Note that if you clear your browser data or use a
-              different device, your exhibitions will not be available.
+              different device, your exhibitions will no longer be available.
               <br />
               <br />
               Rest assured, your data is never sent to any server—it is stored
